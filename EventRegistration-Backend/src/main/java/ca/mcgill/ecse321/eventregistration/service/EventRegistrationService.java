@@ -1,22 +1,20 @@
 package ca.mcgill.ecse321.eventregistration.service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import ca.mcgill.ecse321.eventregistration.dao.*;
+import ca.mcgill.ecse321.eventregistration.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.eventregistration.dao.*;
-import ca.mcgill.ecse321.eventregistration.model.*;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EventRegistrationService {
-
+	
 	@Autowired
 	private EventRepository eventRepository;
 	@Autowired
@@ -25,7 +23,9 @@ public class EventRegistrationService {
 	private RegistrationRepository registrationRepository;
 	@Autowired
 	private CircusRepository circusRepository;
-
+	@Autowired
+	private VolunteerRepository volunteerRepository;
+	
 	@Transactional
 	public Person createPerson(String name) {
 		if (name == null || name.trim().length() == 0) {
@@ -193,10 +193,43 @@ public class EventRegistrationService {
 		return toList(circusRepository.findAll());
 	}
 	
-	//todo
+	@Transactional
+	public List<Volunteer> getAllVolunteers() {
+		return toList(volunteerRepository.findAll());
+	}
+	
 	@Transactional
 	public Circus createCircus(String name, Date circusDate, Time valueOf, Time valueOf1, String company) {
 		Circus circus = new Circus();
 		return circus;
+	}
+	
+	@Transactional
+	public Volunteer getVolunteer(String name) {
+		return volunteerRepository.findVolunteerByName(name);
+	}
+	
+	@Transactional
+	public Volunteer createVolunteer(String name) {
+		Volunteer volunteer = new Volunteer();
+		return volunteer;
+	}
+	
+	@Transactional
+	public Volunteer volunteersEvent(Volunteer volunteer, Event event) {
+		return volunteer;
+	}
+	
+	//link the amount to the credit card
+	@Transactional
+	public CreditCard createCreditCardPay(String accountNumber, int amount) {
+		CreditCard creditCard = new CreditCard();
+		return creditCard;
+	}
+	
+	@Transactional
+	public CreditCard pay(Registration r, CreditCard pay) {
+		CreditCard creditCard = new CreditCard();
+		return creditCard;
 	}
 }
