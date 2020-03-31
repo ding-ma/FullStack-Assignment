@@ -24,12 +24,24 @@ public class PersonDto {
 	public String getName() {
 		return name;
 	}
-
+	
 	public List<EventDto> getEventsAttended() {
 		return eventsAttended;
 	}
-
+	
 	public void setEventsAttended(List<EventDto> events) {
 		this.eventsAttended = events;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return "PersonDto{" +
+				"name='" + name + '\'' +
+				", eventsAttended=" + eventsAttended +
+				'}';
 	}
 }

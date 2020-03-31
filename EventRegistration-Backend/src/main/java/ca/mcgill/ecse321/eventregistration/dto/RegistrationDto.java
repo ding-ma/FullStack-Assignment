@@ -20,13 +20,20 @@ public class RegistrationDto {
 	public void setEvent(EventDto event) {
 		this.event = event;
 	}
-
+	
 	public PersonDto getPerson() {
 		return person;
 	}
-
+	
 	public void setPerson(PersonDto person) {
 		this.person = person;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "RegistrationDto{" +
+				"person=" + person +
+				", event=" + event +
+				'}';
+	}
 }

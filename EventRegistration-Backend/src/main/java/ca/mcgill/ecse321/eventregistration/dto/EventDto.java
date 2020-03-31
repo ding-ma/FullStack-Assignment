@@ -31,12 +31,38 @@ public class EventDto {
 	public Date getDate() {
 		return date;
 	}
-
+	
 	public Time getStartTime() {
 		return startTime;
 	}
-
+	
 	public Time getEndTime() {
 		return endTime;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+	
+	public void setEndTime(Time endTime) {
+		this.endTime = endTime;
+	}
+	
+	@Override
+	public String toString() {
+		return "EventDto{" +
+				"name='" + name + '\'' +
+				", date=" + date +
+				", startTime=" + startTime +
+				", endTime=" + endTime +
+				'}';
 	}
 }
