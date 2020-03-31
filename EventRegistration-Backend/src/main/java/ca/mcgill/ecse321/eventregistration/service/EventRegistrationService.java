@@ -9,32 +9,36 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class EventRegistrationService {
-	
-	@Autowired
-	private EventRepository eventRepository;
-	@Autowired
-	private PersonRepository personRepository;
-	@Autowired
-	private RegistrationRepository registrationRepository;
-	@Autowired
-	private CircusRepository circusRepository;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
-	
-	@Transactional
-	public Person createPerson(String name) {
-		if (name == null || name.trim().length() == 0) {
-			throw new IllegalArgumentException("Person name cannot be empty!");
-		} else if (personRepository.existsById(name)) {
-			throw new IllegalArgumentException("Person has already been created!");
-		}
-		Person person = new Person();
-		person.setName(name);
+    
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private PersonRepository personRepository;
+    @Autowired
+    private RegistrationRepository registrationRepository;
+    @Autowired
+    private CircusRepository circusRepository;
+    @Autowired
+    private VolunteerRepository volunteerRepository;
+    @Autowired
+    private CreditCardRepository creditCardRepository;
+    
+    @Transactional
+    public Person createPerson(String name) {
+        if (name == null || name.trim().length() == 0) {
+            throw new IllegalArgumentException("Person name cannot be empty!");
+        } else if (personRepository.existsById(name)) {
+            throw new IllegalArgumentException("Person has already been created!");
+        }
+        Person person = new Person();
+        person.setName(name);
 		personRepository.save(person);
 		return person;
 	}
@@ -237,30 +241,77 @@ public class EventRegistrationService {
 	
 	@Transactional
 	public Volunteer getVolunteer(String name) {
-		return volunteerRepository.findVolunteerByName(name);
-	}
+        String error = "";
+        if (name == null || name.trim().length() == 0) {
+            error = error + "Person name cannot be empty! ";
+        }
+        error = error.trim();
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(error);
+        }
+        return volunteerRepository.findVolunteerByName(name);
+    }
 	
 	@Transactional
 	public Volunteer createVolunteer(String name) {
-		Volunteer volunteer = new Volunteer();
-		return volunteer;
-	}
+        String error = "";
+        if (name == null || name.trim().length() == 0) {
+            error = error + "Volunteer name cannot be empty! ";
+        } else if (volunteerRepository.findVolunteerByName(name) != null) {
+            error = error + "Volunteer has already been created! ";
+        }
+        
+        error = error.trim();
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(error);
+        }
+        Volunteer volunteer = new Volunteer();
+        volunteer.setName(name);
+        volunteerRepository.save(volunteer);
+        return volunteer;
+    }
 	
 	@Transactional
 	public Volunteer volunteersEvent(Volunteer volunteer, Event event) {
-		return volunteer;
-	}
+        String error = "";
+        if (volunteer == null) {
+            error = error + "Volunteer needs to be selected for volunteers! ";
+        }
+        if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
+            error = error + "Event does not exist!";
+        }
+        error = error.trim();
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(error);
+        }
+        System.out.println(event);
+        Set<Event> events;
+        if (volunteer.getVolunteersFor() == null) {
+            events = new HashSet<>();
+        } else {
+            System.out.println("not -n");
+            //todo check if it was already added
+            events = volunteer.getVolunteersFor();
+        }
+        events.add(event);
+        volunteer.setVolunteersFor(events); //hmm quite stupid that you have to set it??
+        volunteerRepository.save(volunteer);
+        return volunteer;
+    }
 	
 	//link the amount to the credit card
 	@Transactional
 	public CreditCard createCreditCardPay(String accountNumber, int amount) {
-		CreditCard creditCard = new CreditCard();
-		return creditCard;
-	}
-	
-	@Transactional
-	public CreditCard pay(Registration r, CreditCard pay) {
-		CreditCard creditCard = new CreditCard();
-		return creditCard;
-	}
+        CreditCard creditCard = creditCardRepository.findAllByAccountNumber(accountNumber);
+        creditCard.setAmount(amount);
+        creditCardRepository.save(creditCard);
+        return creditCard;
+    }
+    
+    @Transactional
+    public Registration pay(Registration r, CreditCard pay) {
+        r.getCreditCard().setAmount(pay.getAmount());
+        registrationRepository.save(r);
+        return r;
+    }
 }

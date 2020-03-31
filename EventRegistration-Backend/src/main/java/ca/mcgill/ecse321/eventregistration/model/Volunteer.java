@@ -1,18 +1,27 @@
 package ca.mcgill.ecse321.eventregistration.model;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
-public class Volunteer extends Person{
-    private Event event;
+public class Volunteer extends Person {
     
-    @ManyToOne(optional = false)
-    public Event getEvent() {
-        return event;
+    private Set<Event> events;
+    
+    @OneToMany()
+    public Set<Event> getVolunteersFor() {
+        return this.events;
     }
     
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setVolunteersFor(Set<Event> eventss) {
+        this.events = eventss;
+    }
+    
+    @Override
+    public String toString() {
+        return "Volunteer{" +
+                "events=" + events +
+                '}';
     }
 }

@@ -91,17 +91,17 @@ public class TestVolunteerRole {
     }
     
     //todo find out wtf is getVolunteersFor
-//    @Test
-//    public void test_05_VolunteersEvent() {
-//        try {
-//            Volunteer Volunteer = service.createVolunteer("validname");
-//            Event event = VolunteerRoleTestData.setupEvent(service, "eventname");
-//            service.volunteersEvent(Volunteer, event);
-//            assertEquals(Volunteer.getVolunteersFor().size(), 1);
-//        } catch (IllegalArgumentException e) {
-//            fail();
-//        }
-//    }
+    @Test
+    public void test_05_VolunteersEvent() {
+        try {
+            Volunteer Volunteer = service.createVolunteer("validname");
+            Event event = VolunteerRoleTestData.setupEvent(service, "eventname");
+            service.volunteersEvent(Volunteer, event);
+            assertEquals(Volunteer.getVolunteersFor().size(), 1);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+    }
     
     @Test
     public void test_06_VolunteersEventWithNullVolunteer() {
