@@ -1,12 +1,20 @@
 package ca.mcgill.ecse321.eventregistration.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Registration {
-
+	private CreditCard creditCard;
+	
+	@OneToOne
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+	
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
+	}
+	
 	private int id;
 
 	public void setId(int value) {

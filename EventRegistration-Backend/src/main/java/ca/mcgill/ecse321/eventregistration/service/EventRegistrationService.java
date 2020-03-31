@@ -23,6 +23,8 @@ public class EventRegistrationService {
 	private PersonRepository personRepository;
 	@Autowired
 	private RegistrationRepository registrationRepository;
+	@Autowired
+	private CircusRepository circusRepository;
 
 	@Transactional
 	public Person createPerson(String name) {
@@ -184,5 +186,17 @@ public class EventRegistrationService {
 			resultList.add(t);
 		}
 		return resultList;
+	}
+	
+	@Transactional
+	public List<Circus> getAllCircuses() {
+		return toList(circusRepository.findAll());
+	}
+	
+	//todo
+	@Transactional
+	public Circus createCircus(String name, Date circusDate, Time valueOf, Time valueOf1, String company) {
+		Circus circus = new Circus();
+		return circus;
 	}
 }
