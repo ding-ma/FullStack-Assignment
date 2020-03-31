@@ -1,10 +1,10 @@
 package ca.mcgill.ecse321.eventregistration.model;
 
-import javax.persistence.Entity;
-import java.util.Set;
 import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 public class RegistrationManager {
@@ -41,15 +41,25 @@ public class RegistrationManager {
 	public void setEvents(Set<Event> eventss) {
 		this.events = eventss;
 	}
-
-	private int id;
-
-	public void setId(int value) {
-		this.id = value;
-	}
-
-	@Id
-	public int getId() {
-		return this.id;
-	}
+    
+    private int id;
+    
+    public void setId(int value) {
+        this.id = value;
+    }
+    
+    @Id
+    public int getId() {
+        return this.id;
+    }
+    
+    @Override
+    public String toString() {
+        return "RegistrationManager{" +
+                "persons=" + persons +
+                ", registrations=" + registrations +
+                ", events=" + events +
+                ", id=" + id +
+                '}';
+    }
 }

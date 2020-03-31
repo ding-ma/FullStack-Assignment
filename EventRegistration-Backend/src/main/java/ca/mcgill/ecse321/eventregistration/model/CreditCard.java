@@ -5,6 +5,7 @@ import javax.persistence.Id;
 
 @Entity
 public class CreditCard {
+    //todo might need to change amount into a list
     private int amount;
     private String accountNumber;
     

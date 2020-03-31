@@ -15,4 +15,10 @@ public class Circus extends Event{
         this.company = company;
     }
     
+    @Override
+    public String toString() {
+        return "Circus{" +
+                "company='" + company + '\'' +
+                '}';
+    }
 }

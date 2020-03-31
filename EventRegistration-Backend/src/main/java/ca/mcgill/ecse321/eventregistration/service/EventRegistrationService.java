@@ -302,16 +302,43 @@ public class EventRegistrationService {
 	//link the amount to the credit card
 	@Transactional
 	public CreditCard createCreditCardPay(String accountNumber, int amount) {
-        CreditCard creditCard = creditCardRepository.findAllByAccountNumber(accountNumber);
-        creditCard.setAmount(amount);
-        creditCardRepository.save(creditCard);
-        return creditCard;
-    }
-    
-    @Transactional
-    public Registration pay(Registration r, CreditCard pay) {
-        r.getCreditCard().setAmount(pay.getAmount());
-        registrationRepository.save(r);
-        return r;
-    }
+		String error = "";
+		if (amount < 0) {
+			error += "Payment amount cannot be negative! ";
+		}
+		//if it doesnt match the regex fail also.
+		if (accountNumber == null || accountNumber.trim().length() == 0 || !accountNumber.matches("\\d{4}-\\d{4}")) {
+			error += "Account number is null or has wrong format! ";
+		}
+		
+		error = error.trim();
+		if (error.length() > 0) {
+			throw new IllegalArgumentException(error);
+		}
+		
+		CreditCard creditCard = creditCardRepository.findAllByAccountNumber(accountNumber);
+		if (creditCard == null) {
+			creditCard = new CreditCard();
+			creditCard.setAccountNumber(accountNumber);
+		}
+		creditCard.setAmount(amount);
+		creditCardRepository.save(creditCard);
+		return creditCard;
+	}
+	
+	//todo error handling
+	@Transactional
+	public Registration pay(Registration registration, CreditCard pay) {
+		String error = "";
+		if (pay == null || registration == null) {
+			error += "Registration and payment cannot be null! ";
+		}
+		error = error.trim();
+		if (error.length() > 0) {
+			throw new IllegalArgumentException(error);
+		}
+		registration.setCreditCard(pay);
+		registrationRepository.save(registration);
+		return registration;
+	}
 }
