@@ -4,9 +4,9 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    host: 'eventregistration-frontend-123.herokuapp.com',
+    host: 'eventregistration-frontend-123.herokuapp.com', //todo
     port: 443,
-    backendHost: 'eventregistration-backend-123.herokuapp.com',
+    backendHost: 'eventregistration-backend-dm.herokuapp.com',
     backendPort: 443,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
@@ -42,4 +42,4 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
   }
-}
+};

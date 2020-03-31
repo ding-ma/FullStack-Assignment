@@ -5,6 +5,14 @@ public class CreditCardDto {
     private int amount;
     private String accountNumber;
     
+    public CreditCardDto(){
+    
+    }
+    public CreditCardDto(int amount, String accountNumber) {
+        this.amount = amount;
+        this.accountNumber = accountNumber;
+    }
+    
     public int getAmount() {
         return amount;
     }
