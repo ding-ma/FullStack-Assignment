@@ -1,38 +1,37 @@
 package ca.mcgill.ecse321.eventregistration.controller;
 
+import ca.mcgill.ecse321.eventregistration.dao.RegistrationRepository;
+import ca.mcgill.ecse321.eventregistration.dto.*;
+import ca.mcgill.ecse321.eventregistration.model.*;
+import ca.mcgill.ecse321.eventregistration.service.EventRegistrationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ca.mcgill.ecse321.eventregistration.model.*;
-import ca.mcgill.ecse321.eventregistration.dto.*;
-import ca.mcgill.ecse321.eventregistration.service.EventRegistrationService;
+import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class EventRegistrationRestController {
-
+	
 	@Autowired
 	private EventRegistrationService service;
-
+	@Autowired
+	private RegistrationRepository registrationRepository;
+	
 	// POST Mappings
-
+	
 	// @formatter:off
 	// Turning off formatter here to ease comprehension of the sample code by
 	// keeping the linebreaks
 	// Example REST call:
 	// http://localhost:8088/persons/John
-	@PostMapping(value = { "/persons/{name}", "/persons/{name}/" })
+	@PostMapping(value = {"/persons/{name}", "/persons/{name}/"})
 	public PersonDto createPerson(@PathVariable("name") String name) throws IllegalArgumentException {
 		// @formatter:on
 		Person person = service.createPerson(name);
@@ -118,15 +117,59 @@ public class EventRegistrationRestController {
 		}
 		return persons;
 	}
-
-	@GetMapping(value = { "/events/{name}", "/events/{name}/" })
+	
+	@GetMapping(value = {"/events/{name}", "/events/{name}/"})
 	public EventDto getEventByName(@PathVariable("name") String name) throws IllegalArgumentException {
 		return convertToDto(service.getEvent(name));
 	}
 	
+	/*
+	
+	
+	VOLUNTEER
+	
+	
+	 */
+	
+	@PostMapping(value = {"/volunteer/{name}", "/volunteer/{name}"})
+	public VolunteerDTO createVolunteer(@PathVariable("name") String name) throws IllegalArgumentException {
+		Volunteer volunteer = service.createVolunteer(name);
+		return convertDto(volunteer);
+	}
+	
+	private VolunteerDTO convertDto(Volunteer volunteer) {
+		Set<Event> volunteeringEvents = volunteer.getVolunteersFor();
+		List<EventDto> eventDtos = new ArrayList<>();
+		for (Event e : volunteeringEvents) {
+			eventDtos.add(convertToDto(e));
+		}
+		return new VolunteerDTO(volunteer.getName(), eventDtos);
+	}
+	
+	
+	/*
 
+
+	PAYMENTS
+
+	
+	 */
+	
+	@PostMapping(value = {"/{person}/{event}", "/{person}/{event}/"})
+	public RegistrationDto createPayment(@PathVariable String person, @PathVariable String event, @RequestBody CreditCardDto creditCardDto) throws IllegalArgumentException {
+		CreditCard creditCard = service.createCreditCardPay(creditCardDto.getAccountNumber(), creditCardDto.getAmount());
+		Registration registration = registrationRepository.findByPersonNameAndEvent_Name(person, event);
+		return convertToDTO(service.pay(registration, creditCard));
+	}
+	
+	
+	private RegistrationDto convertToDTO(Registration pay) {
+	
+	}
+	
+	
 	// Model - DTO conversion methods (not part of the API)
-
+	
 	private EventDto convertToDto(Event e) {
 		if (e == null) {
 			throw new IllegalArgumentException("There is no such Event!");

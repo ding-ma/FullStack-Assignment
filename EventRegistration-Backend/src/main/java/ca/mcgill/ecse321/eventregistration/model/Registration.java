@@ -8,6 +8,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class Registration {
 	private CreditCard creditCard;
+	private int id;
+	private Person person;
+	private Event event;
 	
 	@OneToOne
 	public CreditCard getCreditCard() {
@@ -18,8 +21,6 @@ public class Registration {
 		this.creditCard = creditCard;
 	}
 	
-	private int id;
-
 	public void setId(int value) {
 		this.id = value;
 	}
@@ -29,8 +30,6 @@ public class Registration {
 		return this.id;
 	}
 
-	private Person person;
-
 	@ManyToOne(optional = false)
 	public Person getPerson() {
 		return this.person;
@@ -39,10 +38,9 @@ public class Registration {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-    
-    private Event event;
-    
-    @ManyToOne(optional = false)
+	
+	
+	@ManyToOne(optional = false)
     public Event getEvent() {
         return this.event;
     }

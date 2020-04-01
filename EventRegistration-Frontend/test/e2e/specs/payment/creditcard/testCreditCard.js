@@ -45,7 +45,7 @@ var testData = {
                 'newAccountNumber': '6666-9999',
                 'newAmount': '200'
             }
-}
+};
 module.exports = {
   'Test credit card Pay: 01 Component Existance': function (browser) {
     browser
