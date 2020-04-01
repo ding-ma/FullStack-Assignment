@@ -207,18 +207,29 @@ public class EventRegistrationRestController {
 
 	PAYMENTS
 
-	
+	every registration has one credit card
 	 */
 	
-	@PostMapping(value = {"/{person}/{event}", "/{person}/{event}/"})
+	@PostMapping(value = {"/payment/{person}/{event}", "/payment/{person}/{event}/"})
 	public RegistrationDto createPayment(@PathVariable String person, @PathVariable String event, @RequestBody CreditCardDto creditCardDto) throws IllegalArgumentException {
 		CreditCard creditCard = service.createCreditCardPay(creditCardDto.getAccountNumber(), creditCardDto.getAmount());
 		Registration registration = registrationRepository.findByPersonNameAndEvent_Name(person, event);
 		return convertToDTO(service.pay(registration, creditCard));
 	}
 	
+	@GetMapping(value = {"/payment/{name}/{eventName}", "/payment/{name}/{eventName}/"})
+	public RegistrationDto getPayment(@PathVariable String name, @PathVariable String eventName){
+		Person person = personRepository.findByName(name);
+		Event event = eventRepository.findByName(eventName);
+		return  convertToDTO(service.getRegistrationByPersonAndEvent(person,event));
+	}
 	
-
+	
+	
+	
+	
+	// Model - DTO conversion methods (not part of the API)
+	
 	private CircusDto convertToDTO(Circus circus){
 		return new CircusDto(circus.getName(), circus.getDate(), circus.getStartTime(),circus.getEndTime(),circus.getCompany());
 
@@ -229,7 +240,6 @@ public class EventRegistrationRestController {
 		return new VolunteerDTO(volunteer.getName(),createAttendedEventDtosForPerson(person));
 	}
 	
-	// Model - DTO conversion methods (not part of the API)
 	
 	private RegistrationDto convertToDTO(Registration registration) {
 		PersonDto personDto = convertToDto(registration.getPerson());

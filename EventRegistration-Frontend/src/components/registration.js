@@ -35,6 +35,7 @@ export default {
         endTime: '11:00'
       },
       selectedPerson: '',
+      selectedVolunteer: '',
       selectedEvent: '',
       payment: {
         accountNumber: '',
@@ -44,6 +45,7 @@ export default {
       errorPerson: '',
       errorEvent: '',
       errorRegistration: '',
+      errorPayment: '',
       response: []
     }
   },
@@ -177,8 +179,8 @@ export default {
         });
     },
 
-    makePayment: function (personName, event, accountNumber, amount) {
-      AXIOS.post('', undefined, undefined)
+    makePayment: function (personName, eventName, accountNumber, amount) {
+      AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, undefined)
     },
 
     assignProfessional: function () {

@@ -1,7 +1,7 @@
 <template>
   <div id="eventregistration">
     <h2>Persons</h2>
-    <table id="persons_table">
+    <table id="persons-table">
       <tr>
         <th>Name</th>
         <th>Events</th>
@@ -20,16 +20,16 @@
       </tr>
       <tr>
         <td>
-          <input id="create_person_person_name" type="text" v-model="newPerson" placeholder="Person Name">
+          <input id="create-person-person-name" placeholder="Person Name" type="text" v-model="newPerson">
         </td>
         <td>
-          <select id='' v-model="personType">
+          <select id='create-person-person-type' v-model="personType">
             <option>Person</option>
             <option>Volunteer</option>
           </select>
         </td>
         <td>
-          <button @click="createPerson(personType, newPerson)" id="create_person_button" v-bind:disabled="!newPerson">
+          <button @click="createPerson(personType, newPerson)" id="create-person-button" v-bind:disabled="!newPerson">
             Create Person
           </button>
         </td>
@@ -70,7 +70,7 @@
           <input id="event-endtime-input" type="time" v-model="newEvent.endTime" placeholder="HH:mm">
         </td>
         <td>
-          <input id="" placeholder="Company" type="text" v-model="company">
+          <input id="event-company-input" placeholder="Company" type="text" v-model="company">
         </td>
         <td>
           <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent,company)">
@@ -102,32 +102,32 @@
     <hr>
     <h2>Assign Professional</h2>
     <label>Volunteer:
-      <select id='' v-model="selectedPerson">
+      <select id='assign-selected-volunteer' v-model="selectedVolunteer">
         <option disabled value="">Please select one</option>
         <option v-bind:key="`volunteer-${i}`" v-for="(volunteer, i) in volunteers">{{volunteer.name}}</option>
       </select>
     </label>
     <label>Event:
-      <select id='' v-model="selectedEvent">
+      <select id='assign-selected-event-volunteer' v-model="selectedEvent">
         <option disabled value="">Please select one</option>
         <option v-bind:key="`event-${i}`" v-for="(event, i) in events">{{event.name}}</option>
       </select>
     </label>
-    <button @click="registerEvent(selectedPerson, selectedEvent)" id=''
-            v-bind:disabled="!selectedPerson || !selectedEvent">Assign
+    <button @click="registerEvent(selectedVolunteer, selectedEvent)" id='assign-button-volunteer'
+            v-bind:disabled="!selectedVolunteer || !selectedEvent">Assign
     </button>
     <hr>
     <h2>Pay for Registration with CreditCard</h2>
     <table align="center">
       <tr>
         <label>Person:
-          <select id='' v-model="selectedPerson">
+          <select id='credit-card-person-select' v-model="selectedPerson">
             <option disabled value="">Please select one</option>
             <option v-bind:key="`person-${i}`" v-for="(person, i) in persons">{{person.name}}</option>
           </select>
         </label>
         <label>Event:
-          <select id='' v-model="selectedEvent">
+          <select id='credit-card-event-select' v-model="selectedEvent">
             <option disabled value="">Please select one</option>
             <option v-bind:key="`event-${i}`" v-for="(event, i) in events">{{event.name}}</option>
           </select>
@@ -135,16 +135,18 @@
       </tr>
       <tr>
         <label>Device Id:
-          <input id="" placeholder="DDDD-DDDD" type="text" v-model="payment.accountNumber">
+          <input id='credit-card-id-input' placeholder="DDDD-DDDD" type="text" v-model="payment.accountNumber">
         </label>
         <label>Amount:
-          <input id="" placeholder="0$" type="number" v-model="payment.amount">
+          <input id='credit-card-amount-input' placeholder="0$" type="number" v-model="payment.amount">
         </label>
       </tr>
       <tr>
-        <button @click="makePayment()" id=''
+        <button @click="makePayment()" id='credit-card-button'
                 v-bind:disabled="!selectedPerson || !selectedEvent || !payment">Make Payment
         </button>
+        <br/>
+        <span id="credit-card-error" style="color:red" v-if="errorPayment">Error: {{errorPayment}}</span>
       </tr>
     </table>
     <hr>
