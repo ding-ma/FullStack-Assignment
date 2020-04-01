@@ -64,6 +64,12 @@ export default {
       this.errorEvent = e
     });
 
+    AXIOS.get('/events/companies').then(response => {
+      this.events = this.events.concat(response.data)
+    }).catch(e => {
+      this.errorEvent = e
+    });
+
     AXIOS.get('/volunteers')
       .then(response => {
         this.volunteers = response.data;
