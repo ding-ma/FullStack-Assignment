@@ -54,6 +54,7 @@
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-date`">{{event.date}}</td>
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-starttime`">{{event.startTime}}</td>
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-endtime`">{{event.endTime}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-company`">{{event.company}}</td>
       </tr>
       <tr>
         <td>
@@ -72,7 +73,8 @@
           <input id="" placeholder="Company" type="text" v-model="company">
         </td>
         <td>
-          <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent)">Create
+          <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent,company)">
+            Create
           </button>
         </td>
       </tr>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.cert.CertSelector;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -57,6 +58,7 @@ public class EventRegistrationRestController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
 			throws IllegalArgumentException {
 		// @formatter:on
+		System.out.println("posting without company");
 		Event event = service.createEvent(name, date, Time.valueOf(startTime), Time.valueOf(endTime));
 		return convertToDto(event);
 	}
@@ -78,14 +80,21 @@ public class EventRegistrationRestController {
 	// GET Mappings
 
 	@GetMapping(value = { "/events", "/events/" })
-	public List<EventDto> getAllEvents() {
-		List<EventDto> eventDtos = new ArrayList<>();
+	public List<CircusDto> getAllEvents() {
+		List<CircusDto> eventDtos = new ArrayList<>();
 		for (Event event : service.getAllEvents()) {
-			eventDtos.add(convertToDto(event));
+			eventDtos.add(convertEventToCircus(event,"--"));
 		}
+		System.out.println("EVENT FETCH"+eventDtos);
 		return eventDtos;
 	}
-
+	
+	private CircusDto convertEventToCircus(Event event, String company){
+		if(company.equals("--"))
+			return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),"--");
+		else
+			return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),company);
+	}
 	// Example REST call:
 	// http://localhost:8088/events/person/JohnDoe
 	@GetMapping(value = { "/events/person/{name}", "/events/person/{name}/" })
@@ -136,6 +145,36 @@ public class EventRegistrationRestController {
 	/*
 	
 	
+	
+	COMPANY
+	
+	
+	 */
+	
+	@PostMapping(value = { "/events/{name}/company/{cName}", "/events/{name}/company/{cName}/" })
+	public CircusDto createEventWithCompany(@PathVariable("name") String name, @PathVariable("cName") String cName, @RequestParam Date date,
+										   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
+								@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
+			throws IllegalArgumentException {
+		// @formatter:on
+		System.out.println("posting for company "+cName);
+		Circus circus = service.createCircus(name, date, Time.valueOf(startTime) , Time.valueOf(endTime), cName);
+		System.out.println(circus);
+		return convertToDTO(circus);
+	}
+	
+	@GetMapping(value = {"/events/companies", "/events/companies/"})
+	public List<CircusDto> getAllCompaniesEvents(){
+		List<CircusDto> eventDtoList = new ArrayList<>();
+		for(Circus e: service.getAllCircuses()){
+			eventDtoList.add(convertToDTO(e));
+		}
+		System.out.println("CIRCUS FETCH"+eventDtoList);
+		return eventDtoList;
+	}
+	/*
+	
+	
 	VOLUNTEER
 	
 	
@@ -164,6 +203,8 @@ public class EventRegistrationRestController {
 		System.out.println(volunteerDTOS);
 		return volunteerDTOS;
 	}
+	
+	
 	/*
 
 
@@ -180,7 +221,9 @@ public class EventRegistrationRestController {
 	}
 	
 	
-	
+	private CircusDto convertToDTO(Circus circus){
+		return new CircusDto(circus.getName(), circus.getDate(), circus.getStartTime(),circus.getEndTime(),circus.getCompany());
+	}
 	
 	private VolunteerDTO convertToDTO(Volunteer volunteer){
 		Person person = personRepository.findByName(volunteer.getName());

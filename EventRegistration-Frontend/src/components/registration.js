@@ -104,20 +104,32 @@ export default {
       }
     },
 
-    createEvent: function (newEvent) {
-      let url = '';
-
-      AXIOS.post('/events/'.concat(newEvent.name), {}, {params: newEvent})
-        .then(response => {
-          this.events.push(response.data);
-          this.errorEvent = '';
-          this.newEvent.name = this.newEvent.make = this.newEvent.movie = this.newEvent.company = this.newEvent.artist = this.newEvent.title = '';
-        })
-        .catch(e => {
-          e = e.response.data.message ? e.response.data.message : e;
-          this.errorEvent = e;
-          console.log(e);
-        });
+    createEvent: function (newEvent, company) {
+      if (company === '') {
+        AXIOS.post('/events/'.concat(newEvent.name), {}, {params: newEvent})
+          .then(response => {
+            this.events.push(response.data);
+            this.errorEvent = '';
+            this.newEvent.name = this.newEvent.make = this.newEvent.movie = this.newEvent.company = this.newEvent.artist = this.newEvent.title = '';
+          })
+          .catch(e => {
+            e = e.response.data.message ? e.response.data.message : e;
+            this.errorEvent = e;
+            console.log(e);
+          });
+      } else {
+        AXIOS.post('/events/'.concat(newEvent.name).concat('/company/').concat(company), {}, {params: newEvent})
+          .then(response => {
+            this.events.push(response.data);
+            this.errorEvent = '';
+            this.newEvent.name = this.newEvent.make = this.newEvent.movie = this.newEvent.company = this.newEvent.artist = this.newEvent.title = '';
+          })
+          .catch(e => {
+            e = e.response.data.message ? e.response.data.message : e;
+            this.errorEvent = e;
+            console.log(e);
+          });
+      }
     },
 
     registerEvent: function (personName, eventName) {
