@@ -69,6 +69,7 @@ public class EventRegistrationRestController {
 		// @formatter:on
 
 		// Both the person and the event are identified by their names
+		System.out.println("registering Person"+pDto+eDto);
 		Person p = service.getPerson(pDto.getName());
 		Event e = service.getEvent(eDto.getName());
 
@@ -121,14 +122,17 @@ public class EventRegistrationRestController {
 
 		return createRegistrationDtosForPerson(p);
 	}
-
+	
+	/*
+	only returns persons
+	 */
 	@GetMapping(value = { "/persons", "/persons/" })
 	public List<PersonDto> getAllPersons()  throws IllegalArgumentException {
 		List<PersonDto> persons = new ArrayList<>();
 		for (Person person : service.getAllPersons()) {
 			persons.add(convertToDto(person));
 		}
-		System.out.println(persons);
+		System.out.println("getAllPersons "+persons);
 		return persons;
 	}
 	
@@ -191,6 +195,9 @@ public class EventRegistrationRestController {
 		return convertToDTO(service.volunteersEvent(volunteer,event));
 	}
 	
+	/*
+	only returns volunteers
+	 */
 	@GetMapping(value = {"/volunteers","volunteers/"})
 	public List<VolunteerDTO> getAllVolunteers()  throws IllegalArgumentException {
 		List<VolunteerDTO> volunteerDTOS = new ArrayList<>();
@@ -201,18 +208,10 @@ public class EventRegistrationRestController {
 		return volunteerDTOS;
 	}
 	
-	/*
-		@GetMapping(value = { "/events/person/{name}", "/events/person/{name}/" })
-	public List<EventDto> getEventsOfPerson(@PathVariable("name") PersonDto pDto)  throws IllegalArgumentException {
-		Person p = convertToDomainObject(pDto);
-		return createAttendedEventDtosForPerson(p);
-	}
-	 */
-	
 	@GetMapping(value = { "/events/volunteer/{name}", "/events/volunteer/{name}/" })
 	public List<EventDto> getEventsOfVolunteer(@PathVariable("name") PersonDto pDto) throws IllegalArgumentException {
 		Volunteer volunteer = volunteerRepository.findVolunteerByName(pDto.getName());
-		System.out.println(createAttendedEventDtosForVolunteer(volunteer));
+		System.out.println("getEventsOfVolunteer "+createAttendedEventDtosForVolunteer(volunteer));
 		return createAttendedEventDtosForVolunteer(volunteer);
 	}
 	

@@ -24,8 +24,8 @@ export default {
   data () {
     return {
       persons: [],
-      volunteers: [],
       events: [],
+      volunteers: [],
       newPerson: '',
       personType: '',
       newEvent: {
@@ -35,6 +35,7 @@ export default {
         endTime: '11:00'
       },
       selectedPerson: '',
+      selectedVolunteer: '',
       selectedEvent: '',
       payment: {
         accountNumber: '',
@@ -44,6 +45,7 @@ export default {
       errorPerson: '',
       errorEvent: '',
       errorRegistration: '',
+      errorVolunteer: '',
       response: []
     }
   },
@@ -161,24 +163,23 @@ export default {
     },
 
     assignVolunteer: function (volunteerName, eventName) {
-      console.log(this.volunteers);
       let event = this.events.find(x => x.name === eventName);
       let person = this.volunteers.find(x => x.name === volunteerName);
       let params = {
         person: person.name,
         event: event.name
       };
-
-      AXIOS.post('/assign/volunteer', {params: params})
+      console.log(params);
+      AXIOS.post('/assign/volunteer', {}, {params: params})
         .then(response => {
-          person.eventsVolunteered.push(event);
+          person.eventsAttended.push(event);
           this.selectedPerson = '';
           this.selectedEvent = '';
-          this.errorRegistration = '';
+          this.errorVolunteer = '';
         })
         .catch(e => {
           e = e.response.data.message ? e.response.data.message : e;
-          this.errorRegistration = e;
+          this.errorVolunteer = e;
           console.log(e);
         });
     },
