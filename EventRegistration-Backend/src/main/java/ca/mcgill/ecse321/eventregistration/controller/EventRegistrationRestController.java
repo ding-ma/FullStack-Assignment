@@ -123,6 +123,7 @@ public class EventRegistrationRestController {
 	public EventDto getEventByName(@PathVariable("name") String name) throws IllegalArgumentException {
 		return convertToDto(service.getEvent(name));
 	}
+	
 
 	// Model - DTO conversion methods (not part of the API)
 

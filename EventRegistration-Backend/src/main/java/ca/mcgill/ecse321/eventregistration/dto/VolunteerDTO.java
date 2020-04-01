@@ -4,22 +4,22 @@ import java.util.List;
 import java.util.Set;
 
 public class VolunteerDTO extends PersonDto {
-    private Set<EventDto> eventsDto;
+    private List<EventDto> eventsDto;
     
     public VolunteerDTO() {
     
     }
     
-    public VolunteerDTO(String name, List<EventDto> events, Set<EventDto> eventsDto) {
-        super(name, events);
-        this.eventsDto = eventsDto;
+    public VolunteerDTO(String name,  List<EventDto> volunteeringEvents) {
+        super(name);
+        this.eventsDto = volunteeringEvents;
     }
     
-    public Set<EventDto> getEventsDto() {
+    public List<EventDto> getEventsDto() {
         return eventsDto;
     }
     
-    public void setEventsDto(Set<EventDto> eventsDto) {
+    public void setEventsDto(List<EventDto> eventsDto) {
         this.eventsDto = eventsDto;
     }
     

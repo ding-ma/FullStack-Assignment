@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import axios from 'axios';
 
 let config = require('../../config');
@@ -36,6 +35,11 @@ export default {
       },
       selectedPerson: '',
       selectedEvent: '',
+      payment: {
+        accountNumber: '',
+        amount: ''
+      },
+      company: '',
       errorPerson: '',
       errorEvent: '',
       errorRegistration: '',
@@ -130,6 +134,14 @@ export default {
           e = e.response.data.message ? e.response.data.message : e;
           console.log(e);
         });
+    },
+
+    makePayment: function (personName, event, accountNumber, amount) {
+      AXIOS.post('', undefined, undefined)
+    },
+
+    assignProfessional: function () {
+      AXIOS.post('', undefined, undefined)
     }
   }
 }
