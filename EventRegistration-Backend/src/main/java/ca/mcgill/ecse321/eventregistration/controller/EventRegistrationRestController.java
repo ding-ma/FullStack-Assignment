@@ -164,7 +164,7 @@ public class EventRegistrationRestController {
 	
 	
 	private RegistrationDto convertToDTO(Registration pay) {
-	
+		return new RegistrationDto();
 	}
 	
 	
