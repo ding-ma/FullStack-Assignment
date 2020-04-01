@@ -198,8 +198,21 @@ export default {
         });
     },
 
-    makePayment: function (personName, eventName, accountNumber, amount) {
-      AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, undefined)
+    makePayment: function (personName, eventName, paymentAccount, paymentAmount) {
+      console.log(personName, eventName, paymentAccount, paymentAmount);
+      let params = {
+        accountNumber: paymentAccount,
+        amount: paymentAmount
+      };
+      AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, {params: params})
+        .then(resonse => {
+
+        })
+        .catch(e => {
+          e = e.response.data.message ? e.response.data.message : e;
+          this.errorPayment = e;
+          console.log(e);
+        });
     }
 
   }

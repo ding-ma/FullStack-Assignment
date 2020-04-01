@@ -150,7 +150,8 @@
         </label>
       </tr>
       <tr>
-        <button @click="makePayment()" id='credit-card-button'
+        <button @click="makePayment(selectedPerson,selectedEvent,payment.accountNumber, payment.amount)"
+                id='credit-card-button'
                 v-bind:disabled="!selectedPerson || !selectedEvent || !payment">Make Payment
         </button>
         <br/>
