@@ -18,18 +18,6 @@
           </ul>
         </td>
       </tr>
-
-      <tr v-bind:key="`volunteer-${i}`" v-for="(volunteer, i) in volunteers">
-        <td>{{volunteer.name}}</td>
-        <td>
-          <ul>
-            <li style="list-style-type: disc;" v-bind:key="`event-${i}`"
-                v-for="(event, i) in volunteer.eventsVolunteered">
-              <span class='registration-event-name'>{{event.name}}</span>
-            </li>
-          </ul>
-        </td>
-      </tr>
       <tr>
         <td>
           <input id="create_person_person_name" type="text" v-model="newPerson" placeholder="Person Name">
@@ -97,7 +85,7 @@
     <label>Person:
       <select id='registration-person-select' v-model="selectedPerson">
         <option disabled value="">Please select one</option>
-        <option v-bind:key="`person-${i}`" v-for="(person, i) in persons.concat(volunteers)">{{person.name}}</option>
+        <option v-bind:key="`person-${i}`" v-for="(person, i) in persons">{{person.name}}</option>
       </select>
     </label>
     <label>Event:
@@ -114,7 +102,7 @@
     <hr>
     <h2>Assign Professional</h2>
     <label>Volunteer:
-      <select id='' v-model="selectedVolunteer">
+      <select id='' v-model="selectedPerson">
         <option disabled value="">Please select one</option>
         <option v-bind:key="`volunteer-${i}`" v-for="(volunteer, i) in volunteers">{{volunteer.name}}</option>
       </select>
@@ -125,11 +113,9 @@
         <option v-bind:key="`event-${i}`" v-for="(event, i) in events">{{event.name}}</option>
       </select>
     </label>
-    <button @click="assignVolunteer(selectedVolunteer, selectedEvent)" id=''
-            v-bind:disabled="!selectedVolunteer || !selectedEvent">Assign
+    <button @click="registerEvent(selectedPerson, selectedEvent)" id=''
+            v-bind:disabled="!selectedPerson || !selectedEvent">Assign
     </button>
-    <br/>
-    <span style="color:red" v-if="errorVolunteer">Error: {{errorVolunteer}}</span>
     <hr>
     <h2>Pay for Registration with CreditCard</h2>
     <table align="center">
@@ -156,7 +142,7 @@
         </label>
       </tr>
       <tr>
-        <button @click="makePayment(person,event.name, payment)" id=''
+        <button @click="makePayment()" id=''
                 v-bind:disabled="!selectedPerson || !selectedEvent || !payment">Make Payment
         </button>
       </tr>

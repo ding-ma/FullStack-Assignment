@@ -27,7 +27,6 @@ public class VolunteerDTO extends PersonDto {
     public String toString() {
         return "VolunteerDTO{" +
                 "eventDtos=" + eventsDto +
-                "name='" + getName() + '\'' +
                 '}';
     }
 }
