@@ -83,17 +83,14 @@ public class EventRegistrationRestController {
 	public List<CircusDto> getAllEvents() {
 		List<CircusDto> eventDtos = new ArrayList<>();
 		for (Event event : service.getAllEvents()) {
-			eventDtos.add(convertEventToCircus(event,"--"));
+			eventDtos.add(convertEventToCircus(event));
 		}
 		System.out.println("EVENT FETCH"+eventDtos);
 		return eventDtos;
 	}
 	
-	private CircusDto convertEventToCircus(Event event, String company){
-		if(company.equals("--"))
-			return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),"--");
-		else
-			return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),company);
+	private CircusDto convertEventToCircus(Event event){
+		return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),"--");
 	}
 	// Example REST call:
 	// http://localhost:8088/events/person/JohnDoe
