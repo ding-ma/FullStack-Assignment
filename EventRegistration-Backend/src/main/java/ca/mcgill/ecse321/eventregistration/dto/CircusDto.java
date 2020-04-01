@@ -25,7 +25,11 @@ public class CircusDto extends EventDto {
     
     @Override
     public String toString() {
-        return "Circus{" +
+        return "CircusDto{" +
+                "name='" + getName() + '\'' +
+                "date='" + getDate()+ '\'' +
+                "startTime='" + getStartTime() + '\'' +
+                "endTime='" + getEndTime() + '\'' +
                 "company='" + company + '\'' +
                 '}';
     }

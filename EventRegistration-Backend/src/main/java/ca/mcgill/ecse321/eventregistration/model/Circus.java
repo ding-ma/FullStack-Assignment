@@ -18,6 +18,10 @@ public class Circus extends Event{
     @Override
     public String toString() {
         return "Circus{" +
+                "name='" + getName() + '\'' +
+                "date='" + getDate()+ '\'' +
+                "startTime='" + getStartTime() + '\'' +
+                "endTime='" + getEndTime() + '\'' +
                 "company='" + company + '\'' +
                 '}';
     }

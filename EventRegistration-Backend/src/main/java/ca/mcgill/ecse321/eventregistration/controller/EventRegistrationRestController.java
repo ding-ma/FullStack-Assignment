@@ -1,6 +1,9 @@
 package ca.mcgill.ecse321.eventregistration.controller;
 
+import ca.mcgill.ecse321.eventregistration.dao.EventRepository;
+import ca.mcgill.ecse321.eventregistration.dao.PersonRepository;
 import ca.mcgill.ecse321.eventregistration.dao.RegistrationRepository;
+import ca.mcgill.ecse321.eventregistration.dao.VolunteerRepository;
 import ca.mcgill.ecse321.eventregistration.dto.*;
 import ca.mcgill.ecse321.eventregistration.model.*;
 import ca.mcgill.ecse321.eventregistration.service.EventRegistrationService;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.cert.CertSelector;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -23,6 +27,12 @@ public class EventRegistrationRestController {
 	private EventRegistrationService service;
 	@Autowired
 	private RegistrationRepository registrationRepository;
+	@Autowired
+	private VolunteerRepository volunteerRepository;
+	@Autowired
+	private EventRepository eventRepository;
+	@Autowired
+	private PersonRepository personRepository;
 	
 	// POST Mappings
 	
@@ -34,6 +44,7 @@ public class EventRegistrationRestController {
 	@PostMapping(value = {"/persons/{name}", "/persons/{name}/"})
 	public PersonDto createPerson(@PathVariable("name") String name) throws IllegalArgumentException {
 		// @formatter:on
+		System.out.println("Creating person");
 		Person person = service.createPerson(name);
 		return convertToDto(person);
 	}
@@ -47,6 +58,7 @@ public class EventRegistrationRestController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
 			throws IllegalArgumentException {
 		// @formatter:on
+		System.out.println("posting without company");
 		Event event = service.createEvent(name, date, Time.valueOf(startTime), Time.valueOf(endTime));
 		return convertToDto(event);
 	}
@@ -68,14 +80,18 @@ public class EventRegistrationRestController {
 	// GET Mappings
 
 	@GetMapping(value = { "/events", "/events/" })
-	public List<EventDto> getAllEvents() {
-		List<EventDto> eventDtos = new ArrayList<>();
+	public List<CircusDto> getAllEvents() {
+		List<CircusDto> eventDtos = new ArrayList<>();
 		for (Event event : service.getAllEvents()) {
-			eventDtos.add(convertToDto(event));
+			eventDtos.add(convertEventToCircus(event));
 		}
+		System.out.println("EVENT FETCH"+eventDtos);
 		return eventDtos;
 	}
-
+	
+	private CircusDto convertEventToCircus(Event event){
+		return new CircusDto(event.getName(), event.getDate(), event.getStartTime(),event.getEndTime(),"--");
+	}
 	// Example REST call:
 	// http://localhost:8088/events/person/JohnDoe
 	@GetMapping(value = { "/events/person/{name}", "/events/person/{name}/" })
@@ -126,6 +142,36 @@ public class EventRegistrationRestController {
 	/*
 	
 	
+	
+	COMPANY
+	
+	
+	 */
+	
+	@PostMapping(value = { "/events/{name}/company/{cName}", "/events/{name}/company/{cName}/" })
+	public CircusDto createEventWithCompany(@PathVariable("name") String name, @PathVariable("cName") String cName, @RequestParam Date date,
+										   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
+								@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
+			throws IllegalArgumentException {
+		// @formatter:on
+		System.out.println("posting for company "+cName);
+		Circus circus = service.createCircus(name, date, Time.valueOf(startTime) , Time.valueOf(endTime), cName);
+		System.out.println(circus);
+		return convertToDTO(circus);
+	}
+	
+	@GetMapping(value = {"/events/companies", "/events/companies/"})
+	public List<CircusDto> getAllCompaniesEvents(){
+		List<CircusDto> eventDtoList = new ArrayList<>();
+		for(Circus e: service.getAllCircuses()){
+			eventDtoList.add(convertToDTO(e));
+		}
+		System.out.println("CIRCUS FETCH"+eventDtoList);
+		return eventDtoList;
+	}
+	/*
+	
+	
 	VOLUNTEER
 	
 	
@@ -133,17 +179,26 @@ public class EventRegistrationRestController {
 	
 	@PostMapping(value = {"/volunteer/{name}", "/volunteer/{name}"})
 	public VolunteerDTO createVolunteer(@PathVariable("name") String name) throws IllegalArgumentException {
+		System.out.println("Creating volunteer");
 		Volunteer volunteer = service.createVolunteer(name);
-		return convertDto(volunteer);
+		return convertToDto(volunteer);
 	}
 	
-	private VolunteerDTO convertDto(Volunteer volunteer) {
-		Set<Event> volunteeringEvents = volunteer.getVolunteersFor();
-		List<EventDto> eventDtos = new ArrayList<>();
-		for (Event e : volunteeringEvents) {
-			eventDtos.add(convertToDto(e));
+	@PostMapping(value = {"/volunteer/{name}/event/{eventName}}", "/volunteer/{name}/event/{eventName}}"})
+	public VolunteerDTO registerVolunteerForEvent(@PathVariable String name, @PathVariable String eventName){
+		Volunteer volunteer = volunteerRepository.findVolunteerByName(name);
+		Event event = eventRepository.findByName(eventName);
+		return convertToDTO(service.volunteersEvent(volunteer,event));
+	}
+	
+	@GetMapping(value = {"/volunteers","volunteers/"})
+	public List<VolunteerDTO> getAllVolunteers(){
+		List<VolunteerDTO> volunteerDTOS = new ArrayList<>();
+		for (Volunteer volunteer:service.getAllVolunteers()){
+			volunteerDTOS.add(convertToDTO(volunteer));
 		}
-		return new VolunteerDTO(volunteer.getName(), eventDtos);
+		System.out.println(volunteerDTOS);
+		return volunteerDTOS;
 	}
 	
 	
@@ -163,12 +218,48 @@ public class EventRegistrationRestController {
 	}
 	
 	
-	private RegistrationDto convertToDTO(Registration pay) {
-		return new RegistrationDto();
+
+	private CircusDto convertToDTO(Circus circus){
+		return new CircusDto(circus.getName(), circus.getDate(), circus.getStartTime(),circus.getEndTime(),circus.getCompany());
+
+	}
+	
+	private VolunteerDTO convertToDTO(Volunteer volunteer){
+		Person person = personRepository.findByName(volunteer.getName());
+		return new VolunteerDTO(volunteer.getName(),createAttendedEventDtosForPerson(person));
+	}
+	
+	// Model - DTO conversion methods (not part of the API)
+	
+	private RegistrationDto convertToDTO(Registration registration) {
+		PersonDto personDto = convertToDto(registration.getPerson());
+		EventDto eventDto = convertToDto(registration.getEvent());
+		CreditCardDto creditCardDto = convertToDto(registration.getCreditCard());
+		return new RegistrationDto(personDto,eventDto,creditCardDto);
 	}
 	
 	
-	// Model - DTO conversion methods (not part of the API)
+	private VolunteerDTO convertToDto(Volunteer volunteer) {
+		Set<Event> volunteeringEvents = volunteer.getVolunteersFor();
+		List<EventDto> eventDtos = new ArrayList<>();
+		if(volunteeringEvents != null){
+		for (Event e : volunteeringEvents) {
+			eventDtos.add(convertToDto(e));
+		}
+		} else{
+			eventDtos = null;
+		}
+		return new VolunteerDTO(volunteer.getName(), eventDtos);
+	}
+	
+	private CreditCardDto convertToDto(CreditCard creditCard){
+		if(creditCard == null){
+			throw new IllegalArgumentException("There is no such CreditCard!");
+		}
+		return new CreditCardDto(creditCard.getAccountNumber(), creditCard.getAmount());
+	}
+	
+
 	
 	private EventDto convertToDto(Event e) {
 		if (e == null) {

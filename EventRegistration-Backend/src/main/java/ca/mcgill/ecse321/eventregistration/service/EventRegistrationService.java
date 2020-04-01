@@ -236,6 +236,8 @@ public class EventRegistrationService {
 		circus.setEndTime(endTime);
 		circus.setCompany(company);
 		circusRepository.save(circus);
+		System.out.println("Service"+circus);
+		System.out.println(company);
 		return circus;
 	}
 	

@@ -23,7 +23,7 @@
           <input id="create_person_person_name" type="text" v-model="newPerson" placeholder="Person Name">
         </td>
         <td>
-          <select id='1' v-model="personType">
+          <select id='' v-model="personType">
             <option>Person</option>
             <option>Volunteer</option>
           </select>
@@ -54,6 +54,7 @@
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-date`">{{event.date}}</td>
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-starttime`">{{event.startTime}}</td>
         <td v-bind:id="`${event.name.replace(/\s/g, '_')}-endtime`">{{event.endTime}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-company`">{{event.company}}</td>
       </tr>
       <tr>
         <td>
@@ -72,7 +73,8 @@
           <input id="" placeholder="Company" type="text" v-model="company">
         </td>
         <td>
-          <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent)">Create
+          <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent,company)">
+            Create
           </button>
         </td>
       </tr>
@@ -83,7 +85,7 @@
     <label>Person:
       <select id='registration-person-select' v-model="selectedPerson">
         <option disabled value="">Please select one</option>
-        <option v-for="(person, i) in persons" v-bind:key="`person-${i}`">{{person.name}}</option>
+        <option v-bind:key="`person-${i}`" v-for="(person, i) in persons">{{person.name}}</option>
       </select>
     </label>
     <label>Event:
@@ -102,7 +104,7 @@
     <label>Volunteer:
       <select id='' v-model="selectedPerson">
         <option disabled value="">Please select one</option>
-        <option v-bind:key="`person-${i}`" v-for="(person, i) in persons">{{person.name}}</option>
+        <option v-bind:key="`volunteer-${i}`" v-for="(volunteer, i) in volunteers">{{volunteer.name}}</option>
       </select>
     </label>
     <label>Event:
