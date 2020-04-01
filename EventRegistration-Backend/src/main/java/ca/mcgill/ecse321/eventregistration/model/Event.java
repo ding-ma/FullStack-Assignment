@@ -10,7 +10,6 @@ import java.sql.Time;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "TYPE")
 public class Event {
     private String name;
-    private Volunteer volunteer;
     
     public void setName(String value) {
         this.name = value;
@@ -48,14 +47,6 @@ public class Event {
         return this.endTime;
     }
     
-    @ManyToOne
-    public Volunteer getVolunteer() {
-        return volunteer;
-    }
-    
-    public void setVolunteer(Volunteer volunteer) {
-        this.volunteer = volunteer;
-    }
     
     @Override
     public String toString() {

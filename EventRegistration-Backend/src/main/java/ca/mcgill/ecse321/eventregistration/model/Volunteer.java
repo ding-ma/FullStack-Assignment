@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.eventregistration.model;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
@@ -9,7 +9,7 @@ public class Volunteer extends Person {
     
     private Set<Event> events;
     
-    @OneToMany
+    @ManyToMany
     public Set<Event> getVolunteersFor() {
         return this.events;
     }

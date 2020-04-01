@@ -17,6 +17,22 @@
             </li>
           </ul>
         </td>
+        <td>
+         Payment goes here
+          <ul>
+            <li v-for="(event, i) in person.eventsAttended" v-bind:key="`event-${i}`" style="list-style-type: disc;">
+              <span class='registration-event-name'>{{event.name}}</span>
+            </li>
+          </ul>
+        </td>
+        <td>
+          Amount goes here
+          <ul>
+            <li v-for="(event, i) in person.eventsAttended" v-bind:key="`event-${i}`" style="list-style-type: disc;">
+              <span class='registration-event-name'>{{event.name}}</span>
+            </li>
+          </ul>
+        </td>
       </tr>
       <tr>
         <td>

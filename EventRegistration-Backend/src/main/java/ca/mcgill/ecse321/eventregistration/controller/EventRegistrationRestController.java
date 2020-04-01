@@ -211,8 +211,9 @@ public class EventRegistrationRestController {
 	 */
 	
 	@PostMapping(value = {"/payment/{person}/{event}", "/payment/{person}/{event}/"})
-	public RegistrationDto createPayment(@PathVariable String person, @PathVariable String event, @RequestBody CreditCardDto creditCardDto) throws IllegalArgumentException {
-		CreditCard creditCard = service.createCreditCardPay(creditCardDto.getAccountNumber(), creditCardDto.getAmount());
+	public RegistrationDto createPayment(@PathVariable String person, @PathVariable String event, @RequestParam String accountNumber, @RequestParam int amount) throws IllegalArgumentException {
+		System.out.println("Creating Payment name:" + person + " event:" + event + " payment info:" + accountNumber + "  " + amount);
+		CreditCard creditCard = service.createCreditCardPay(accountNumber, amount);
 		Registration registration = registrationRepository.findByPersonNameAndEvent_Name(person, event);
 		return convertToDTO(service.pay(registration, creditCard));
 	}

@@ -283,6 +283,9 @@ public class EventRegistrationService {
 		if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
 			error = error + "Event does not exist!";
 		}
+		if (registrationRepository.existsByPersonAndEvent(volunteer, event)) {
+			error += "Person is already registered to this event!";
+		}
 		error = error.trim();
 		if (error.length() > 0) {
 			throw new IllegalArgumentException(error);
@@ -330,11 +333,15 @@ public class EventRegistrationService {
 	}
 	
 	//todo error handling
+	//check if person is registered to even before paying
 	@Transactional
 	public Registration pay(Registration registration, CreditCard pay) {
 		String error = "";
 		if (pay == null || registration == null) {
 			error += "Registration and payment cannot be null! ";
+		}
+		if (!registrationRepository.existsByPersonAndEvent(registration.getPerson(), registration.getEvent())) {
+			error += "Person is not yet registered to the event! ";
 		}
 		error = error.trim();
 		if (error.length() > 0) {
