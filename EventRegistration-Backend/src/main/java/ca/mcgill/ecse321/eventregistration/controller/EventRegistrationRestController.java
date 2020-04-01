@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.cert.CertSelector;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -184,17 +183,18 @@ public class EventRegistrationRestController {
 		return convertToDto(volunteer);
 	}
 	
-	@PostMapping(value = {"/volunteer/{name}/event/{eventName}}", "/volunteer/{name}/event/{eventName}}"})
-	public VolunteerDTO registerVolunteerForEvent(@PathVariable String name, @PathVariable String eventName){
+	@PostMapping(value = {"/volunteer/{name}/event/{eventName}", "/volunteer/{name}/event/{eventName}"})
+	public VolunteerDTO registerVolunteerForEvent(@PathVariable String name, @PathVariable String eventName) {
+		System.out.println("registering volunteer" + name + "    event:" + eventName);
 		Volunteer volunteer = volunteerRepository.findVolunteerByName(name);
 		Event event = eventRepository.findByName(eventName);
-		return convertToDTO(service.volunteersEvent(volunteer,event));
+		return convertToDTO(service.volunteersEvent(volunteer, event));
 	}
 	
-	@GetMapping(value = {"/volunteers","volunteers/"})
-	public List<VolunteerDTO> getAllVolunteers(){
+	@GetMapping(value = {"/volunteers", "volunteers/"})
+	public List<VolunteerDTO> getAllVolunteers() {
 		List<VolunteerDTO> volunteerDTOS = new ArrayList<>();
-		for (Volunteer volunteer:service.getAllVolunteers()){
+		for (Volunteer volunteer : service.getAllVolunteers()) {
 			volunteerDTOS.add(convertToDTO(volunteer));
 		}
 		System.out.println(volunteerDTOS);

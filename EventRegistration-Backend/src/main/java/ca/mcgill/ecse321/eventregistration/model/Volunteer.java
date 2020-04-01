@@ -9,7 +9,7 @@ public class Volunteer extends Person {
     
     private Set<Event> events;
     
-    @OneToMany()
+    @OneToMany
     public Set<Event> getVolunteersFor() {
         return this.events;
     }

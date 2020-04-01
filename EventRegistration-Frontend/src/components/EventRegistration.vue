@@ -81,6 +81,8 @@
     </table>
     <span id="event-error" v-if="errorEvent" style="color:red">Error: {{errorEvent}}</span>
     <hr>
+
+
     <h2>Registrations</h2>
     <label>Person:
       <select id='registration-person-select' v-model="selectedPerson">
@@ -100,6 +102,8 @@
     <br/>
     <span v-if="errorRegistration" style="color:red">Error: {{errorRegistration}}</span>
     <hr>
+
+
     <h2>Assign Professional</h2>
     <label>Volunteer:
       <select id='assign-selected-volunteer' v-model="selectedVolunteer">
@@ -113,10 +117,14 @@
         <option v-bind:key="`event-${i}`" v-for="(event, i) in events">{{event.name}}</option>
       </select>
     </label>
-    <button @click="registerEvent(selectedVolunteer, selectedEvent)" id='assign-button-volunteer'
+    <button @click="assignProfessional(selectedVolunteer, selectedEvent)" id='assign-button-volunteer'
             v-bind:disabled="!selectedVolunteer || !selectedEvent">Assign
     </button>
+    <br/>
+    <span v-if="errorAssignProfessional" style="color:red">Error: {{errorAssignProfessional}}</span>
     <hr>
+
+
     <h2>Pay for Registration with CreditCard</h2>
     <table align="center">
       <tr>

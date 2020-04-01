@@ -5,21 +5,24 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-@Table(name="event")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, name="TYPE")
+@Table(name = "event")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "TYPE")
 public class Event {
     private String name;
-
+    private Volunteer volunteer;
+    
     public void setName(String value) {
         this.name = value;
     }
+    
     @Id
     public String getName() {
         return this.name;
     }
+    
     private Date date;
-
+    
     public void setDate(Date value) {
         this.date = value;
     }
@@ -43,6 +46,15 @@ public class Event {
     
     public Time getEndTime() {
         return this.endTime;
+    }
+    
+    @ManyToOne
+    public Volunteer getVolunteer() {
+        return volunteer;
+    }
+    
+    public void setVolunteer(Volunteer volunteer) {
+        this.volunteer = volunteer;
     }
     
     @Override

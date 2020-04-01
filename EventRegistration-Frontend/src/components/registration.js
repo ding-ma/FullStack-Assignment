@@ -27,13 +27,14 @@ export default {
       volunteers: [],
       events: [],
       newPerson: '',
-      personType: '',
+      personType: 'Person',
       newEvent: {
         name: '',
         date: '2017-12-08',
         startTime: '09:00',
         endTime: '11:00'
       },
+      company: '',
       selectedPerson: '',
       selectedVolunteer: '',
       selectedEvent: '',
@@ -41,10 +42,10 @@ export default {
         accountNumber: '',
         amount: ''
       },
-      company: '',
       errorPerson: '',
       errorEvent: '',
       errorRegistration: '',
+      errorAssignProfessional: '',
       errorPayment: '',
       response: []
     }
@@ -100,13 +101,14 @@ export default {
       } else {
         AXIOS.post('/volunteer/'.concat(personName), {}, {})
           .then(response => {
+            this.volunteers.push(response.data);
             this.persons.push(response.data);
             this.errorPerson = '';
             this.newPerson = '';
           })
           .catch(e => {
             e = e.response.data.message ? e.response.data.message : e;
-            this.errorPerson = e;
+            this.errorAssignProfessional = e;
             console.log(e);
           });
       }
@@ -162,6 +164,23 @@ export default {
         });
     },
 
+    assignProfessional: function (volunteerName, eventName) {
+      let event = this.events.find(x => x.name === eventName);
+      let person = this.persons.find(x => x.name === volunteerName);
+      AXIOS.post('/volunteer/' + volunteerName + '/event/' + eventName, undefined, undefined)
+        .then(response => {
+          person.eventsAttended.push(event);
+          this.selectedPerson = '';
+          this.selectedEvent = '';
+          this.errorAssignProfessional = '';
+        })
+        .catch(e => {
+          e = e.response.data.message ? e.response.data.message : e;
+          this.errorAssignProfessional = e;
+          console.log(e);
+        });
+    },
+
     getRegistrations: function (personName) {
       AXIOS.get('/events/person/'.concat(personName))
         .then(response => {
@@ -181,10 +200,7 @@ export default {
 
     makePayment: function (personName, eventName, accountNumber, amount) {
       AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, undefined)
-    },
-
-    assignProfessional: function () {
-      AXIOS.post('', undefined, undefined)
     }
+
   }
 }

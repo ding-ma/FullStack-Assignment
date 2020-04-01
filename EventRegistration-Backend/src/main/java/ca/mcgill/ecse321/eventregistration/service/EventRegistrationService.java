@@ -262,44 +262,45 @@ public class EventRegistrationService {
         } else if (volunteerRepository.findVolunteerByName(name) != null) {
             error = error + "Volunteer has already been created! ";
         }
-        
-        error = error.trim();
-        if (error.length() > 0) {
-            throw new IllegalArgumentException(error);
-        }
-        Volunteer volunteer = new Volunteer();
-        volunteer.setName(name);
-        volunteerRepository.save(volunteer);
-        return volunteer;
-    }
+		
+		error = error.trim();
+		if (error.length() > 0) {
+			throw new IllegalArgumentException(error);
+		}
+		Volunteer volunteer = new Volunteer();
+		volunteer.setName(name);
+		volunteerRepository.save(volunteer);
+		return volunteer;
+	}
 	
+	//todo: error handling, check if volunteer is already registered to event
 	@Transactional
 	public Volunteer volunteersEvent(Volunteer volunteer, Event event) {
-        String error = "";
-        if (volunteer == null) {
-            error = error + "Volunteer needs to be selected for volunteers! ";
-        }
-        if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
-            error = error + "Event does not exist!";
-        }
-        error = error.trim();
-        if (error.length() > 0) {
-            throw new IllegalArgumentException(error);
-        }
-        System.out.println(event);
-        Set<Event> events;
-        if (volunteer.getVolunteersFor() == null) {
-            events = new HashSet<>();
-        } else {
-            System.out.println("not -n");
-            //todo check if it was already added
-            events = volunteer.getVolunteersFor();
-        }
-        events.add(event);
-        volunteer.setVolunteersFor(events); //hmm quite stupid that you have to set it??
-        volunteerRepository.save(volunteer);
-        return volunteer;
-    }
+		String error = "";
+		if (volunteer == null) {
+			error = error + "Volunteer needs to be selected for volunteers! ";
+		}
+		if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
+			error = error + "Event does not exist!";
+		}
+		error = error.trim();
+		if (error.length() > 0) {
+			throw new IllegalArgumentException(error);
+		}
+		System.out.println(event);
+		Set<Event> events;
+		if (volunteer.getVolunteersFor() == null) {
+			events = new HashSet<>();
+		} else {
+			System.out.println("not -n");
+			//todo check if it was already added
+			events = volunteer.getVolunteersFor();
+		}
+		events.add(event);
+		volunteer.setVolunteersFor(events); //hmm quite stupid that you have to set it??
+		volunteerRepository.save(volunteer);
+		return volunteer;
+	}
 	
 	//link the amount to the credit card
 	@Transactional
