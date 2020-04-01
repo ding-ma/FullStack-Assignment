@@ -73,7 +73,7 @@ export default {
     AXIOS.get('/volunteers')
       .then(response => {
         this.volunteers = response.data;
-        this.volunteers.forEach(person => this.getRegistrations(person.name))
+        this.volunteers.forEach(person => this.getVolunteers(person.name))
       })
       .catch(e => {
         this.errorPerson = e
@@ -98,7 +98,7 @@ export default {
       } else {
         AXIOS.post('/volunteer/'.concat(personName), {}, {})
           .then(response => {
-            this.persons.push(response.data);
+            this.volunteers.push(response.data);
             this.errorPerson = '';
             this.newPerson = '';
           })
@@ -160,6 +160,29 @@ export default {
         });
     },
 
+    assignVolunteer: function (volunteerName, eventName) {
+      console.log(this.volunteers);
+      let event = this.events.find(x => x.name === eventName);
+      let person = this.volunteers.find(x => x.name === volunteerName);
+      let params = {
+        person: person.name,
+        event: event.name
+      };
+
+      AXIOS.post('/assign/volunteer', {params: params})
+        .then(response => {
+          person.eventsVolunteered.push(event);
+          this.selectedPerson = '';
+          this.selectedEvent = '';
+          this.errorRegistration = '';
+        })
+        .catch(e => {
+          e = e.response.data.message ? e.response.data.message : e;
+          this.errorRegistration = e;
+          console.log(e);
+        });
+    },
+
     getRegistrations: function (personName) {
       AXIOS.get('/events/person/'.concat(personName))
         .then(response => {
@@ -177,12 +200,26 @@ export default {
         });
     },
 
-    makePayment: function (personName, event, accountNumber, amount) {
-      AXIOS.post('', undefined, undefined)
+    getVolunteers: function (personName) { // volunteer --> person
+      AXIOS.get('/events/volunteer/'.concat(personName))
+        .then(response => {
+          if (!response.data || response.data.length <= 0) return;
+
+          let indexPart = this.volunteers.map(x => x.name).indexOf(personName);
+          this.volunteers[indexPart].eventsVolunteered = [];
+          response.data.forEach(event => {
+            this.volunteers[indexPart].eventsVolunteered.push(event);
+          });
+        })
+        .catch(e => {
+          e = e.response.data.message ? e.response.data.message : e;
+          console.log(e);
+        });
     },
 
-    assignProfessional: function () {
+    makePayment: function (personName, event, payment) {
       AXIOS.post('', undefined, undefined)
     }
+
   }
 }

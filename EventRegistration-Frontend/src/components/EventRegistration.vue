@@ -113,7 +113,7 @@
         <option v-bind:key="`event-${i}`" v-for="(event, i) in events">{{event.name}}</option>
       </select>
     </label>
-    <button @click="registerEvent(selectedPerson, selectedEvent)" id=''
+    <button @click="assignVolunteer(selectedPerson, selectedEvent)" id=''
             v-bind:disabled="!selectedPerson || !selectedEvent">Assign
     </button>
     <hr>
@@ -142,7 +142,7 @@
         </label>
       </tr>
       <tr>
-        <button @click="makePayment()" id=''
+        <button @click="makePayment(person,event.name, payment)" id=''
                 v-bind:disabled="!selectedPerson || !selectedEvent || !payment">Make Payment
         </button>
       </tr>
