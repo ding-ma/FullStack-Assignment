@@ -218,8 +218,10 @@ public class EventRegistrationRestController {
 	}
 	
 	
+
 	private CircusDto convertToDTO(Circus circus){
 		return new CircusDto(circus.getName(), circus.getDate(), circus.getStartTime(),circus.getEndTime(),circus.getCompany());
+
 	}
 	
 	private VolunteerDTO convertToDTO(Volunteer volunteer){
