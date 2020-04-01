@@ -23,7 +23,7 @@
           <input id="create_person_person_name" type="text" v-model="newPerson" placeholder="Person Name">
         </td>
         <td>
-          <select id='1' v-model="personType">
+          <select id='' v-model="personType">
             <option>Person</option>
             <option>Volunteer</option>
           </select>
@@ -102,7 +102,7 @@
     <label>Volunteer:
       <select id='' v-model="selectedPerson">
         <option disabled value="">Please select one</option>
-        <option v-bind:key="`person-${i}`" v-for="(person, i) in persons">{{person.name}}</option>
+        <option v-bind:key="`volunteer-${i}`" v-for="(volunteer, i) in volunteers">{{volunteer.name}}</option>
       </select>
     </label>
     <label>Event:

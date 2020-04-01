@@ -8,7 +8,7 @@ public class CreditCardDto {
     public CreditCardDto(){
     
     }
-    public CreditCardDto(int amount, String accountNumber) {
+    public CreditCardDto(String accountNumber, int amount) {
         this.amount = amount;
         this.accountNumber = accountNumber;
     }
