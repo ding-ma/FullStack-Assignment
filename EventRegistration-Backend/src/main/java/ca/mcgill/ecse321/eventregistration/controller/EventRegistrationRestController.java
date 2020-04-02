@@ -58,6 +58,8 @@ public class EventRegistrationRestController {
 			throws IllegalArgumentException {
 		// @formatter:on
 		System.out.println("posting without company");
+		if(startTime == null || endTime == null)
+			throw  new IllegalArgumentException("Time can't be empty! ");
 		Event event = service.createEvent(name, date, Time.valueOf(startTime), Time.valueOf(endTime));
 		System.out.println(convertToEventDToToCircusDTO(event));
 		return convertToEventDToToCircusDTO(event);
