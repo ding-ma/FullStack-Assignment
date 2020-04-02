@@ -5,7 +5,7 @@ module.exports = {
     const event = {
       company: 'Alegria',
       name: 'Circus 1',
-      date: {day: '10', month: '10', year: '2030'},
+      date: {day: '10', month: '10', year: '002030'},
       startTime: '08:00:00',
       endTime: '11:00:00'
     };
@@ -22,7 +22,7 @@ module.exports = {
       .setValue(config.id.nameInput, event.name)
       .pause(config.time.pause)
       .assert.visible(config.id.dateInput)
-      .setValue(config.id.dateInput, `${event.date.day}-${event.date.month}-${event.date.year}`)
+      .setValue(config.id.dateInput, `${event.date.year}-${event.date.month}-${event.date.day}`)
       .pause(config.time.pause)
       .assert.visible(config.id.starttimeInput)
       .setValue(config.id.starttimeInput, event.startTime)
@@ -40,7 +40,7 @@ module.exports = {
     const event = {
       company: '--',
       name: 'Generic Event for Circus',
-      date: {day: '10', month: '10', year: '2030'},
+      date: {day: '10', month: '10', year: '002030'},
       startTime: '08:00:00',
       endTime: '11:00:00'
     };
@@ -54,7 +54,7 @@ module.exports = {
       .setValue(config.id.nameInput, event.name)
       .pause(config.time.pause)
       .assert.visible(config.id.dateInput)
-      .setValue(config.id.dateInput, `${event.date.day}-${event.date.month}-${event.date.year}`)
+      .setValue(config.id.dateInput, `${event.date.year}-${event.date.month}-${event.date.day}`)
       .pause(config.time.pause)
       .assert.visible(config.id.starttimeInput)
       .setValue(config.id.starttimeInput, event.startTime)
@@ -72,7 +72,7 @@ module.exports = {
     const event = {
       company: 'Alegria',
       name: 'Circus 1',
-      date: {day: '10', month: '10', year: '2030'},
+      date: {day: '10', month: '10', year: '002030'},
       startTime: '08:00:00',
       endTime: '11:00:00'
     };
@@ -88,7 +88,7 @@ module.exports = {
       .setValue(config.id.nameInput, event.name)
       .pause(config.time.pause)
       .assert.visible(config.id.dateInput)
-      .setValue(config.id.dateInput, `${event.date.day}-${event.date.month}-${event.date.year}`)
+      .setValue(config.id.dateInput, `${event.date.year}-${event.date.month}-${event.date.day}`)
       .pause(config.time.pause)
       .assert.visible(config.id.starttimeInput)
       .setValue(config.id.starttimeInput, event.startTime)
@@ -119,7 +119,7 @@ module.exports = {
       .setValue(config.id.nameInput, event.name)
       .pause(config.time.pause)
       .assert.visible(config.id.dateInput)
-      .setValue(config.id.dateInput, `${event.date.day}-${event.date.month}-${event.date.year}`)
+      .setValue(config.id.dateInput, `${event.date.year}-${event.date.month}-${event.date.day}`)
       .pause(config.time.pause)
       .assert.visible(config.id.starttimeInput)
       .sendKeys(config.id.starttimeInput, client.Keys.BACK_SPACE)

@@ -1,15 +1,15 @@
 /* eslint-disable semi */
 /* eslint-disable indent */
 /* eslint-disable no-trailing-spaces */
-var config = require('./config.json')
+var config = require('./config.json');
 
 var testData = {
-  "name1": "elias",
-  "name2": "abbas",
-  "name3": "marton",
-  "name4": "john",
-  "eventName": "sampleEvent"
-}
+  'name1': 'elias',
+  'name2': 'abbas',
+  'name3': 'marton',
+  'name4': 'john',
+  'eventName': 'sampleEvent'
+};
 
 module.exports = {
   'Test existance of all elements': function (client) {
@@ -81,9 +81,9 @@ module.exports = {
       .waitForElementVisible('body', 1000)
       .setValue(config.componentIDs.eventField, testData.eventName + config.professional)
       .pause(1000)
-      .setValue(config.componentIDs.eventDate, "12/04/2019")
-      .setValue(config.componentIDs.eventStartTime, "8:00 AM")
-      .setValue(config.componentIDs.eventEndTime, "9:00 AM")
+      .setValue(config.componentIDs.eventDate, '2019/04/12')
+      .setValue(config.componentIDs.eventStartTime, '8:00 AM')
+      .setValue(config.componentIDs.eventEndTime, '9:00 AM')
       .pause(1000)
       .click(config.componentIDs.eventButton)
   },
@@ -101,5 +101,5 @@ module.exports = {
       .click(config.componentIDs.assignButton)
       .pause(1000)
       .end();
-  },
+  }
 };

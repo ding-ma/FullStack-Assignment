@@ -49,6 +49,8 @@
     </table>
     <span v-if="errorPerson" style="color:red">Error: {{errorPerson}}</span>
     <hr>
+
+
     <h2>Events</h2>
     <table id='events-table'>
       <tr>

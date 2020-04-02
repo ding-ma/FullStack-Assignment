@@ -144,6 +144,7 @@ export default {
             console.log(e);
           });
       }
+      this.$forceUpdate(); // wasn't updating so needed to force it browser page location.reload()
     },
 
     registerEvent: function (personName, eventName) {
