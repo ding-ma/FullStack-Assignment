@@ -6,7 +6,7 @@ var testData = {
   'validPaymentData': {
     'personName': 'Percy-creditCard',
     'eventName': 'Soccer-creditCard',
-    'startDate': '2019/04/12',
+    'startDate': '002019/04/12',
     'startTime': '8:00 AM',
     'endDate': '10:00 AM',
     'paymentType': 'creditCard',
@@ -16,7 +16,7 @@ var testData = {
   'InvalidIdTestData': {
     'personName': 'Percy1-creditCard',
     'eventName': 'Soccer1-creditCard',
-    'startDate': '2019/04/12',
+    'startDate': '002019/04/12',
     'startTime': '8:00 AM',
     'endDate': '10:00 AM',
     'paymentType': 'creditCard',
@@ -26,7 +26,7 @@ var testData = {
   'InvalidAmountTestData': {
     'personName': 'Percy2-creditCard',
     'eventName': 'Soccer2-creditCard',
-    'startDate': '2019/04/12',
+    'startDate': '002019/04/12',
     'startTime': '8:00 AM',
     'endDate': '10:00 AM',
     'paymentType': 'creditCard',
@@ -36,7 +36,7 @@ var testData = {
   'TestUpdatePaymentData': {
     'personName': 'Percy3-creditCard',
     'eventName': 'Soccer3-creditCard',
-    'startDate': '2019/04/12',
+    'startDate': '002019/04/12',
     'startTime': '8:00 AM',
     'endDate': '10:00 AM',
     'paymentType': 'creditCard',
