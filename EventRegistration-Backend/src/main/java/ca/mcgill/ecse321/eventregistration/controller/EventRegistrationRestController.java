@@ -161,6 +161,8 @@ public class EventRegistrationRestController {
 			throws IllegalArgumentException {
 		// @formatter:on
 		System.out.println("posting for company "+cName);
+		if(startTime == null || endTime == null)
+			throw  new IllegalArgumentException("Time can't be empty! ");
 		Circus circus = service.createCircus(name, date, Time.valueOf(startTime) , Time.valueOf(endTime), cName);
 		System.out.println(circus);
 		return convertToDTO(circus);
