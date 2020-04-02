@@ -26,6 +26,7 @@ export default {
       persons: [],
       volunteers: [],
       events: [],
+      payments: [],
       newPerson: '',
       personType: 'Person',
       newEvent: {
@@ -35,6 +36,7 @@ export default {
         endTime: '11:00'
       },
       company: '',
+      newCompany: '',
       selectedPerson: '',
       selectedVolunteer: '',
       selectedEvent: '',
@@ -81,6 +83,7 @@ export default {
       .catch(e => {
         this.errorPerson = e
       });
+    // get payments here
   },
 
   methods: {
@@ -199,21 +202,31 @@ export default {
     },
 
     makePayment: function (personName, eventName, paymentAccount, paymentAmount) {
+      this.errorPayment = '';
       console.log(personName, eventName, paymentAccount, paymentAmount);
       let params = {
         accountNumber: paymentAccount,
         amount: paymentAmount
       };
       AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, {params: params})
-        .then(resonse => {
-
+        .then(response => {
+          this.payments.push(response.data);
+          console.log(this.payments);
+          //   console.log(this.persons);
+          //   console.log(response.data);
+          // //  this.persons.events.push(response.data.creditCardDto)
+          //   console.log(this.persons[0].eventsAttended.push(response.data.creditCardDto.amount))
+          //   console.log(this.persons)
         })
         .catch(e => {
           e = e.response.data.message ? e.response.data.message : e;
           this.errorPayment = e;
           console.log(e);
         });
-    }
+    },
 
+    getPayment: function (personName, eventName) {
+
+    }
   }
 }

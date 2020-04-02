@@ -220,6 +220,7 @@ public class EventRegistrationRestController {
 	
 	@GetMapping(value = {"/payment/{name}/{eventName}", "/payment/{name}/{eventName}/"})
 	public RegistrationDto getPayment(@PathVariable String name, @PathVariable String eventName){
+		System.out.println("getting payment of" + name+" event:"+ eventName);
 		Person person = personRepository.findByName(name);
 		Event event = eventRepository.findByName(eventName);
 		return  convertToDTO(service.getRegistrationByPersonAndEvent(person,event));

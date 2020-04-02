@@ -18,18 +18,16 @@
           </ul>
         </td>
         <td>
-         Payment goes here
           <ul>
-            <li v-for="(event, i) in person.eventsAttended" v-bind:key="`event-${i}`" style="list-style-type: disc;">
-              <span class='registration-event-name'>{{event.name}}</span>
+            <li style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment) in payments">
+              <span class='registration-event-name'>{{payment.creditCardDto.accountNumber}}</span>
             </li>
           </ul>
         </td>
         <td>
-          Amount goes here
           <ul>
-            <li v-for="(event, i) in person.eventsAttended" v-bind:key="`event-${i}`" style="list-style-type: disc;">
-              <span class='registration-event-name'>{{event.name}}</span>
+            <li style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment) in payments">
+              <span class='registration-event-name'>{{payment}}</span>
             </li>
           </ul>
         </td>
@@ -54,7 +52,6 @@
       </tr>
     </table>
     <span v-if="errorPerson" style="color:red">Error: {{errorPerson}}</span>
-
     <hr>
     <h2>Events</h2>
     <table id='events-table'>
@@ -66,11 +63,11 @@
         <th>Company</th>
       </tr>
       <tr v-for="(event, i) in events" v-bind:id="event.name" v-bind:key="`event-${i}`">
-        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-name`">{{event.name}}</td>
-        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-date`">{{event.date}}</td>
-        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-starttime`">{{event.startTime}}</td>
-        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-endtime`">{{event.endTime}}</td>
-        <td v-bind:id="`${event.name.replace(/\s/g, '_')}-company`">{{event.company}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '-')}-name`">{{event.name}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '-')}-date`">{{event.date}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '-')}-starttime`">{{event.startTime}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '-')}-endtime`">{{event.endTime}}</td>
+        <td v-bind:id="`${event.name.replace(/\s/g, '-')}-company`">{{event.company}}</td>
       </tr>
       <tr>
         <td>
@@ -86,10 +83,11 @@
           <input id="event-endtime-input" type="time" v-model="newEvent.endTime" placeholder="HH:mm">
         </td>
         <td>
-          <input id="event-company-input" placeholder="Company" type="text" v-model="company">
+          <input id="event-company-input" placeholder="Company" type="text" v-model="newCompany">
         </td>
         <td>
-          <button id="event-create-button" v-bind:disabled="!newEvent.name" v-on:click="createEvent(newEvent,company)">
+          <button id="event-create-button" v-bind:disabled="!newEvent.name"
+                  v-on:click="createEvent(newEvent,newCompany)">
             Create
           </button>
         </td>

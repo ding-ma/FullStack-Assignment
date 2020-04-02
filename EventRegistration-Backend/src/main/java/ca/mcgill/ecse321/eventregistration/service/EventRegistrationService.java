@@ -343,6 +343,9 @@ public class EventRegistrationService {
 		if (!registrationRepository.existsByPersonAndEvent(registration.getPerson(), registration.getEvent())) {
 			error += "Person is not yet registered to the event! ";
 		}
+//		if(registration.getCreditCard() != null){
+//			error += "You have already paid for the event! ";
+//		}
 		error = error.trim();
 		if (error.length() > 0) {
 			throw new IllegalArgumentException(error);
