@@ -289,7 +289,7 @@ public class EventRegistrationService {
 		String error = "";
 		if (volunteer == null) {
 			error = error + "Volunteer needs to be selected for volunteers! ";
-		} else if (volunteerRepository.findVolunteerByName(volunteer.getName()) != null) {
+		} else if (volunteerRepository.findVolunteerByName(volunteer.getName()) == null) {
 			error = error + "Volunteer does not exist! ";
 		}
 		if (event == null) {

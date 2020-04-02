@@ -22,6 +22,7 @@ public class Volunteer extends Person {
     public String toString() {
         return "Volunteer{" +
                 "events=" + events +
+                ", name='" + getName() + '\'' +
                 '}';
     }
 }

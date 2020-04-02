@@ -124,7 +124,7 @@ export default {
           .then(response => {
             this.events.push(response.data);
             this.errorEvent = '';
-            this.newEvent.name = this.newEvent.make = this.newEvent.movie = this.newEvent.company = this.newEvent.artist = this.newEvent.title = '';
+            this.newEvent.name = this.newEvent.make = this.newEvent.movie = this.newEvent.company = this.newEvent.artist = this.newEvent.title = this.newEvent.company = '';
           })
           .catch(e => {
             e = e.response.data.message ? e.response.data.message : e;
@@ -228,7 +228,6 @@ export default {
     },
 
     makePayment: function (personName, eventName, paymentAccount, paymentAmount) {
-      this.errorPayment = '';
       console.log(personName, eventName, paymentAccount, paymentAmount);
       let params = {
         accountNumber: paymentAccount,
@@ -239,7 +238,7 @@ export default {
           console.log(this.payments);
           this.persons.forEach(person => this.getRegistrations(person.name));
           this.persons.forEach(person => this.getPaymentsRegistrationByPerson(person.name));
-          this.errorPayment = this.personName = this.eventName = this.paymentAccount = this.paymentAmount = '';
+          this.errorPayment = this.selectedPerson = this.selectedEvent = this.payment.accountNumber = this.payment.amount = '';
         })
         .catch(e => {
           e = e.response.data.message ? e.response.data.message : e;
