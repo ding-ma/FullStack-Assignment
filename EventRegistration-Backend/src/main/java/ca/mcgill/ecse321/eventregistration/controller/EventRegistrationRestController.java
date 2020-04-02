@@ -52,16 +52,21 @@ public class EventRegistrationRestController {
 	// Example REST call:
 	// http://localhost:8080/events/testevent?date=2013-10-23&startTime=00:00&endTime=23:59
 	@PostMapping(value = { "/events/{name}", "/events/{name}/" })
-	public EventDto createEvent(@PathVariable("name") String name, @RequestParam Date date,
+	public CircusDto createEvent(@PathVariable("name") String name, @RequestParam Date date,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
 			throws IllegalArgumentException {
 		// @formatter:on
 		System.out.println("posting without company");
 		Event event = service.createEvent(name, date, Time.valueOf(startTime), Time.valueOf(endTime));
-		return convertToDto(event);
+		System.out.println(convertToEventDToToCircusDTO(event));
+		return convertToEventDToToCircusDTO(event);
 	}
-
+	
+	private CircusDto convertToEventDToToCircusDTO(Event event){
+		//String name, Date date, Time startTime, Time endTime, String company
+		return new CircusDto(event.getName(), event.getDate(),event.getStartTime(),event.getEndTime(),"--");
+	}
 	// @formatter:off
 	@PostMapping(value = { "/register", "/register/" })
 	public RegistrationDto registerPersonForEvent(@RequestParam(name = "person") PersonDto pDto,

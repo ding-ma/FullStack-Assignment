@@ -145,7 +145,7 @@ export default {
           });
       }
       // wasn't updating so needed to force it browser page location.reload()
-      this.$forceUpdate();
+      // this.$forceUpdate();
       //location.reload();
     },
 
@@ -245,6 +245,7 @@ export default {
           this.errorPayment = e;
           console.log(e);
         });
+      // location.reload(); 69 passe with this on. need to find a way to update UI after change
     },
 
     getPayment: function (personName, eventName) {
