@@ -120,7 +120,7 @@ public class EventRegistrationRestController {
 			throws IllegalArgumentException {
 		// Both the person and the event are identified by their names
 		Person p = service.getPerson(pDto.getName());
-
+		System.out.println("get registration for " + createRegistrationDtosForPerson(p));
 		return createRegistrationDtosForPerson(p);
 	}
 
@@ -215,7 +215,10 @@ public class EventRegistrationRestController {
 		System.out.println("Creating Payment name:" + person + " event:" + event + " payment info:" + accountNumber + "  " + amount);
 		CreditCard creditCard = service.createCreditCardPay(accountNumber, amount);
 		Registration registration = registrationRepository.findByPersonNameAndEvent_Name(person, event);
-		return convertToDTO(service.pay(registration, creditCard));
+		registration = service.pay(registration, creditCard);
+		System.out.println(registration);
+		System.out.println(convertToDTO(registration));
+		return convertToDTO(registration);
 	}
 	
 	@GetMapping(value = {"/payment/{name}/{eventName}", "/payment/{name}/{eventName}/"})
@@ -300,7 +303,8 @@ public class EventRegistrationRestController {
 	private RegistrationDto convertToDto(Registration r) {
 		EventDto eDto = convertToDto(r.getEvent());
 		PersonDto pDto = convertToDto(r.getPerson());
-		RegistrationDto rDto = new RegistrationDto(pDto, eDto);
+		CreditCardDto cDto = convertToDto(r.getCreditCard());
+		RegistrationDto rDto = new RegistrationDto(pDto, eDto, cDto);
 		return rDto;
 	}
 

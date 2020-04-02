@@ -25,4 +25,12 @@ public class CreditCard {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
+    
+    @Override
+    public String toString() {
+        return "CreditCard{" +
+                "amount=" + amount +
+                ", accountNumber='" + accountNumber + '\'' +
+                '}';
+    }
 }
