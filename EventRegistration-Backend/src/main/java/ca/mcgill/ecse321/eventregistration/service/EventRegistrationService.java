@@ -203,6 +203,14 @@ public class EventRegistrationService {
 	}
 	
 	@Transactional
+	public Circus getCircus(String name) {
+		if (name == null || name.trim().length() == 0) {
+			throw new IllegalArgumentException("Circus name cannot be empty!");
+		}
+		return circusRepository.findByName(name);
+	}
+	
+	@Transactional
 	public Circus createCircus(String name, Date circusDate, Time startTime, Time endTime, String company) {
 		String error = "";
 		if (name == null || name.trim().length() == 0) {
@@ -243,16 +251,18 @@ public class EventRegistrationService {
 	
 	@Transactional
 	public Volunteer getVolunteer(String name) {
-        String error = "";
-        if (name == null || name.trim().length() == 0) {
-            error = error + "Person name cannot be empty! ";
-        }
-        error = error.trim();
-        if (error.length() > 0) {
-            throw new IllegalArgumentException(error);
-        }
-        return volunteerRepository.findVolunteerByName(name);
-    }
+		String error = "";
+		if (name == null || name.trim().length() == 0) {
+			error = error + "Person name cannot be empty! ";
+		} else if (volunteerRepository.findVolunteerByName(name) == null) {
+			error += "Volunteer does not exist! ";
+		}
+		error = error.trim();
+		if (error.length() > 0) {
+			throw new IllegalArgumentException(error);
+		}
+		return volunteerRepository.findVolunteerByName(name);
+	}
 	
 	@Transactional
 	public Volunteer createVolunteer(String name) {
@@ -279,8 +289,12 @@ public class EventRegistrationService {
 		String error = "";
 		if (volunteer == null) {
 			error = error + "Volunteer needs to be selected for volunteers! ";
+		} else if (volunteerRepository.findVolunteerByName(volunteer.getName()) != null) {
+			error = error + "Volunteer does not exist! ";
 		}
-		if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
+		if (event == null) {
+			error = error + "Event needs to be selected! ";
+		} else if (eventRepository.findByName(event.getName()) == null) { //event wasnt saved
 			error = error + "Event does not exist!";
 		}
 		if (registrationRepository.existsByPersonAndEvent(volunteer, event)) {
@@ -340,9 +354,7 @@ public class EventRegistrationService {
 		if (pay == null || registration == null) {
 			error += "Registration and payment cannot be null! ";
 		}
-		if (!registrationRepository.existsByPersonAndEvent(registration.getPerson(), registration.getEvent())) {
-			error += "Person is not yet registered to the event! ";
-		}
+
 //		if(registration.getCreditCard() != null){
 //			error += "You have already paid for the event! ";
 //		}

@@ -237,6 +237,7 @@ export default {
       AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, {params: params})
         .then(response => {
           console.log(this.payments);
+          this.persons.forEach(person => this.getRegistrations(person.name));
           this.persons.forEach(person => this.getPaymentsRegistrationByPerson(person.name));
           this.errorPayment = this.personName = this.eventName = this.paymentAccount = this.paymentAmount = '';
         })
@@ -246,10 +247,6 @@ export default {
           console.log(e);
         });
       // location.reload(); 69 passe with this on. need to find a way to update UI after change
-    },
-
-    getPayment: function (personName, eventName) {
-
     }
   }
 }
