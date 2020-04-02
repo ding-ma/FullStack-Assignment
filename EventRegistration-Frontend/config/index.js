@@ -1,10 +1,10 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path')
+var path = require('path');
 
 module.exports = {
   build: {
     env: require('./prod.env'),
-    host: 'eventregistration-frontend-123.herokuapp.com', //todo
+    host: 'eventregistration-backend-dm.herokuapp.com', //todo
     port: 443,
     backendHost: 'eventregistration-backend-dm.herokuapp.com',
     backendPort: 443,
