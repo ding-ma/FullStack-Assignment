@@ -26,16 +26,15 @@ export default {
       persons: [],
       volunteers: [],
       events: [],
-      payments: [],
       newPerson: '',
       personType: 'Person',
       newEvent: {
         name: '',
         date: '2017-12-08',
         startTime: '09:00',
-        endTime: '11:00'
+        endTime: '11:00',
+        company: ''
       },
-      company: '',
       newCompany: '',
       selectedPerson: '',
       selectedVolunteer: '',
@@ -57,7 +56,8 @@ export default {
     AXIOS.get('/persons')
       .then(response => {
         this.persons = response.data;
-        this.persons.forEach(person => this.getRegistrations(person.name))
+        this.persons.forEach(person => this.getRegistrations(person.name));
+        this.persons.forEach(person => this.getPaymentsRegistrationByPerson(person.name));
       })
       .catch(e => {
         this.errorPerson = e
@@ -77,8 +77,9 @@ export default {
 
     AXIOS.get('/volunteers')
       .then(response => {
-        this.volunteers = response.data;
-        this.volunteers.forEach(person => this.getRegistrations(person.name))
+        this.volunteers.push(response.data);
+        this.persons.push(response.data);
+        //       this.volunteers.forEach(person => this.getRegistrations(person.name))
       })
       .catch(e => {
         this.errorPerson = e
@@ -117,8 +118,8 @@ export default {
       }
     },
 
-    createEvent: function (newEvent, company) {
-      if (company === '') {
+    createEvent: function (newEvent) {
+      if (newEvent.company === '') {
         AXIOS.post('/events/'.concat(newEvent.name), {}, {params: newEvent})
           .then(response => {
             this.events.push(response.data);
@@ -131,7 +132,7 @@ export default {
             console.log(e);
           });
       } else {
-        AXIOS.post('/events/'.concat(newEvent.name).concat('/company/').concat(company), {}, {params: newEvent})
+        AXIOS.post('/events/'.concat(newEvent.name).concat('/company/').concat(newEvent.company), {}, {params: newEvent})
           .then(response => {
             this.events.push(response.data);
             this.errorEvent = '';
@@ -201,6 +202,28 @@ export default {
         });
     },
 
+    getPaymentsRegistrationByPerson: function (personName) {
+      AXIOS.get('/registrations/person/'.concat(personName))
+        .then(response => {
+          if (!response.data || response.data.length <= 0) return;
+
+          let indexPart = this.persons.map(x => x.name).indexOf(personName);
+          this.persons[indexPart].payments = [];
+          response.data.forEach(registration => {
+            console.log('registration');
+            console.log(registration);
+            if (registration.creditCardDto) {
+              this.persons[indexPart].payments.push(registration.creditCardDto);
+            }
+          });
+          this.$forceUpdate(); // wasn't updating so needed to force it
+        })
+        .catch(e => {
+          e = e.response.data.message ? e.response.data.message : e;
+          console.log(e);
+        });
+    },
+
     makePayment: function (personName, eventName, paymentAccount, paymentAmount) {
       this.errorPayment = '';
       console.log(personName, eventName, paymentAccount, paymentAmount);
@@ -210,13 +233,9 @@ export default {
       };
       AXIOS.post('payment/'.concat(personName).concat('/').concat(eventName), undefined, {params: params})
         .then(response => {
-          this.payments.push(response.data);
           console.log(this.payments);
-          //   console.log(this.persons);
-          //   console.log(response.data);
-          // //  this.persons.events.push(response.data.creditCardDto)
-          //   console.log(this.persons[0].eventsAttended.push(response.data.creditCardDto.amount))
-          //   console.log(this.persons)
+          this.persons.forEach(person => this.getPaymentsRegistrationByPerson(person.name));
+          this.errorPayment = this.personName = this.eventName = this.paymentAccount = this.paymentAmount = '';
         })
         .catch(e => {
           e = e.response.data.message ? e.response.data.message : e;

@@ -18,18 +18,14 @@
           </ul>
         </td>
         <td>
-          <ul>
-            <li style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment) in payments">
-              <span class='registration-event-name'>{{payment.creditCardDto.accountNumber}}</span>
-            </li>
-          </ul>
+          <div style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment, i) in person.payments">
+            <span class='registration-event-name'>{{payment.accountNumber}}</span>
+          </div>
         </td>
         <td>
-          <ul>
-            <li style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment) in payments">
-              <span class='registration-event-name'>{{payment}}</span>
-            </li>
-          </ul>
+          <div style="list-style-type: disc;" v-bind:key="`event-${i}`" v-for="(payment, i) in person.payments">
+            <span class='registration-event-name'>{{payment.amount}}</span>
+          </div>
         </td>
       </tr>
       <tr>
@@ -83,11 +79,11 @@
           <input id="event-endtime-input" type="time" v-model="newEvent.endTime" placeholder="HH:mm">
         </td>
         <td>
-          <input id="event-company-input" placeholder="Company" type="text" v-model="newCompany">
+          <input id="event-company-input" placeholder="Company" type="text" v-model="newEvent.company">
         </td>
         <td>
           <button id="event-create-button" v-bind:disabled="!newEvent.name"
-                  v-on:click="createEvent(newEvent,newCompany)">
+                  v-on:click="createEvent(newEvent)">
             Create
           </button>
         </td>
