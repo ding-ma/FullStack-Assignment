@@ -43,7 +43,6 @@ public class EventRegistrationRestController {
 	@PostMapping(value = {"/persons/{name}", "/persons/{name}/"})
 	public PersonDto createPerson(@PathVariable("name") String name) throws IllegalArgumentException {
 		// @formatter:on
-		System.out.println("Creating person");
 		Person person = service.createPerson(name);
 		return convertToDto(person);
 	}
@@ -57,11 +56,9 @@ public class EventRegistrationRestController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
 			throws IllegalArgumentException {
 		// @formatter:on
-		System.out.println("posting without company");
 		if(startTime == null || endTime == null)
 			throw  new IllegalArgumentException("Time can't be empty! ");
 		Event event = service.createEvent(name, date, Time.valueOf(startTime), Time.valueOf(endTime));
-		System.out.println(convertToEventDToToCircusDTO(event));
 		return convertToEventDToToCircusDTO(event);
 	}
 	
@@ -91,7 +88,6 @@ public class EventRegistrationRestController {
 		for (Event event : service.getAllEvents()) {
 			eventDtos.add(convertEventToCircus(event));
 		}
-		System.out.println("EVENT FETCH"+eventDtos);
 		return eventDtos;
 	}
 	
@@ -127,7 +123,6 @@ public class EventRegistrationRestController {
 			throws IllegalArgumentException {
 		// Both the person and the event are identified by their names
 		Person p = service.getPerson(pDto.getName());
-		System.out.println("get registration for " + createRegistrationDtosForPerson(p));
 		return createRegistrationDtosForPerson(p);
 	}
 
@@ -160,11 +155,9 @@ public class EventRegistrationRestController {
 								@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime)
 			throws IllegalArgumentException {
 		// @formatter:on
-		System.out.println("posting for company "+cName);
 		if(startTime == null || endTime == null)
 			throw  new IllegalArgumentException("Time can't be empty! ");
 		Circus circus = service.createCircus(name, date, Time.valueOf(startTime) , Time.valueOf(endTime), cName);
-		System.out.println(circus);
 		return convertToDTO(circus);
 	}
 	
@@ -174,7 +167,6 @@ public class EventRegistrationRestController {
 		for(Circus e: service.getAllCircuses()){
 			eventDtoList.add(convertToDTO(e));
 		}
-		System.out.println("CIRCUS FETCH"+eventDtoList);
 		return eventDtoList;
 	}
 	/*
@@ -187,14 +179,12 @@ public class EventRegistrationRestController {
 	
 	@PostMapping(value = {"/volunteer/{name}", "/volunteer/{name}"})
 	public VolunteerDTO createVolunteer(@PathVariable("name") String name) throws IllegalArgumentException {
-		System.out.println("Creating volunteer");
 		Volunteer volunteer = service.createVolunteer(name);
 		return convertToDto(volunteer);
 	}
 	
 	@PostMapping(value = {"/volunteer/{name}/event/{eventName}", "/volunteer/{name}/event/{eventName}"})
 	public VolunteerDTO registerVolunteerForEvent(@PathVariable String name, @PathVariable String eventName) {
-		System.out.println("registering volunteer" + name + "    event:" + eventName);
 		Volunteer volunteer = volunteerRepository.findVolunteerByName(name);
 		Event event = eventRepository.findByName(eventName);
 		return convertToDTO(service.volunteersEvent(volunteer, event));
@@ -206,7 +196,6 @@ public class EventRegistrationRestController {
 		for (Volunteer volunteer : service.getAllVolunteers()) {
 			volunteerDTOS.add(convertToDTO(volunteer));
 		}
-		System.out.println(volunteerDTOS);
 		return volunteerDTOS;
 	}
 	
@@ -221,18 +210,14 @@ public class EventRegistrationRestController {
 	
 	@PostMapping(value = {"/payment/{person}/{event}", "/payment/{person}/{event}/"})
 	public RegistrationDto createPayment(@PathVariable String person, @PathVariable String event, @RequestParam String accountNumber, @RequestParam int amount) throws IllegalArgumentException {
-		System.out.println("Creating Payment name:" + person + " event:" + event + " payment info:" + accountNumber + "  " + amount);
 		CreditCard creditCard = service.createCreditCardPay(accountNumber, amount);
 		Registration registration = registrationRepository.findByPersonNameAndEvent_Name(person, event);
 		registration = service.pay(registration, creditCard);
-		System.out.println(registration);
-		System.out.println(convertToDTO(registration));
 		return convertToDTO(registration);
 	}
 	
 	@GetMapping(value = {"/payment/{name}/{eventName}", "/payment/{name}/{eventName}/"})
 	public RegistrationDto getPayment(@PathVariable String name, @PathVariable String eventName){
-		System.out.println("getting payment of" + name+" event:"+ eventName);
 		Person person = personRepository.findByName(name);
 		Event event = eventRepository.findByName(eventName);
 		return  convertToDTO(service.getRegistrationByPersonAndEvent(person,event));

@@ -244,8 +244,6 @@ public class EventRegistrationService {
 		circus.setEndTime(endTime);
 		circus.setCompany(company);
 		circusRepository.save(circus);
-		System.out.println("Service"+circus);
-		System.out.println(company);
 		return circus;
 	}
 	
@@ -304,12 +302,10 @@ public class EventRegistrationService {
 		if (error.length() > 0) {
 			throw new IllegalArgumentException(error);
 		}
-		System.out.println(event);
 		Set<Event> events;
 		if (volunteer.getVolunteersFor() == null) {
 			events = new HashSet<>();
 		} else {
-			System.out.println("not -n");
 			//todo check if it was already added
 			events = volunteer.getVolunteersFor();
 		}

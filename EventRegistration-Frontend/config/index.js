@@ -4,7 +4,7 @@ var path = require('path');
 module.exports = {
   build: {
     env: require('./prod.env'),
-    host: 'eventregistration-backend-dm.herokuapp.com', //todo
+    host: 'eventregistration-frontend-dm.herokuapp.com', //todo
     port: 443,
     backendHost: 'eventregistration-backend-dm.herokuapp.com',
     backendPort: 443,
